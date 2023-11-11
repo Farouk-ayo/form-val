@@ -86,23 +86,29 @@
   font-size: 1rem;
   font-weight: 100;
 }
-#promptForm {
+.promptForm {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
+  position: relative;
 }
 
-#promptForm div {
+.eachInput {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   width: 100%;
   gap: 2rem;
+  position: relative;
+}
+.eachInput span {
+  width: 70%;
+  position: relative;
 }
 
-#promptForm div label {
+.eachInput label {
   font-size: 1rem;
   color: #616161;
   font-weight: 600;
@@ -111,8 +117,13 @@
   padding: 1rem;
 }
 
-#promptForm div input {
-  width: 70%;
+.inputDiv {
+  position: relative;
+  width: 100%;
+}
+
+.inputDiv input {
+  width: 100%;
   padding: 0.7rem 0.5rem;
   font-size: 0.9rem;
   outline: none;
@@ -120,18 +131,18 @@
   border-radius: 0.5rem;
 }
 
-#promptForm div input::placeholder {
+.eachInput input::placeholder {
   color: #bab7b7;
   font-weight: 500;
 }
 
-#promptForm div input:hover {
+.eachInput input:hover {
   border: 0.12rem solid rgb(66, 66, 66);
   transition: all 0.3s;
 }
 
-#promptForm div textarea {
-  width: 70%;
+.inputDiv textarea {
+  width: 100%;
   padding: 0.7rem 0.5rem;
   font-size: 0.9rem;
   outline: none;
@@ -140,20 +151,14 @@
   resize: none;
 }
 
-#promptForm div textarea::placeholder {
+.eachInput textarea::placeholder {
   color: #bab7b7;
   font-weight: 500;
 }
 
-#promptForm div textarea:hover {
+.eachInput textarea:hover {
   outline: 0.12rem solid rgb(66, 66, 66);
   transition: all 0.3s;
-}
-
-.promptTextDiv {
-  display: flex;
-  flex-direction: row;
-  align-items: start !important;
 }
 
 .submit {
@@ -201,4 +206,50 @@
 hr {
   border: none;
   border-bottom: 0.1rem solid #d4d2d2;
+}
+
+.arrowDown {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.rotated .arrowDown {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.suggestionsType {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 0.5rem;
+  background-color: white;
+  width: 100%;
+  z-index: 4;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+  display: none;
+}
+
+.suggestionsType::-webkit-scrollbar {
+  display: none;
+}
+
+.show {
+  display: block !important;
+}
+
+.suggestionsType ul li {
+  list-style: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.inputDiv:focus-within .arrow-icon {
+  transform: rotate(180deg);
 }
