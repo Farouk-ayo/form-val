@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI for Work: Prompts Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Numans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <a href="https://imgbb.com/"
+          ><img
+            src="https://i.ibb.co/ZKrtGj9/Screenshot-2023-11-11-135157.png"
+            alt="Screenshot-2023-11-11-135157"
+            border="0"
+        /></a>
+        <h1>No-Code <br />Resources</h1>
+      </div>
+      <div class="links">
+        <a href="">Home</a>
+        <a href="">Prompts</a>
+
+        <a href="" class="promptLink">Add a Prompt</a>
+      </div>
+    </header>
+    <main class="mainForm">
+      <div class="formDetails">
+        <h2>AI For Work: Prompts</h2>
+        <h4>Fill out this form to add a Prompt</h4>
+        <form id="promptForm">
+          <div>
+            <label for="promptType">Prompt Type *</label>
+            <input
+              type="text"
+              id="promptType"
+              placeholder="Select Prompt"
+              required
+            />
+          </div>
+          <div>
+            <label for="promptCatg">Prompt Category</label>
+            <input
+              type="text"
+              id="promptCatg"
+              placeholder="Select Prompt Category"
+              required
+            />
+          </div>
+
+          <div class="promptTextDiv">
+            <label for="promptText">Prompt Text</label>
+            <textarea
+              name=""
+              id=""
+              cols="30"
+              rows="6"
+              id="promptText"
+              required
+              placeholder="Paste Prompts here"
+            ></textarea>
+          </div>
+          <div>
+            <label for="promptTitle">Prompt Title *</label>
+            <input
+              type="text"
+              name=""
+              id="promptTitle"
+              placeholder="Your Prompt Title Goes Here"
+              required
+            />
+          </div>
+          <div>
+            <label for="sourceLink"> Source Link</label>
+            <input
+              type="url"
+              id="sourceLink"
+              placeholder="Copy link to original prompt here"
+              pattern="https?://.+"
+              required
+            />
+          </div>
+          <div>
+            <label for="industry">Industry</label>
+            <input
+              type="text"
+              name=""
+              id="industry"
+              placeholder="Select Industry"
+              required
+            />
+          </div>
+          <div>
+            <label for="department">Department</label>
+            <input
+              type="text"
+              name=""
+              id="department"
+              placeholder="Select Department"
+              required
+            />
+          </div>
+          <div>
+            <label for="role">Role *</label>
+            <input type="text" name="" id="role" placeholder="Select Role" />
+          </div>
+          <input type="submit" class="submit" />
+        </form>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footerLinks">
+        <a href="https://imgbb.com/"
+          ><img
+            src="https://i.ibb.co/ZKrtGj9/Screenshot-2023-11-11-135157.png"
+            alt="Screenshot-2023-11-11-135157"
+            border="0"
+        /></a>
+        <div class="info">
+          <a href="">Contact</a>
+          <a href="">Explore</a>
+        </div>
+      </div>
+      <hr />
+      <caption>
+        © 2022 My Resources. All rights reserved.
+      </caption>
+    </footer>
+  </body>
+</html>

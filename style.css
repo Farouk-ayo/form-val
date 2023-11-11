@@ -1,0 +1,204 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Numans", sans-serif;
+}
+
+.logo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo img {
+  height: 3.5rem;
+  width: 3.5rem;
+  object-fit: cover;
+}
+
+.logo h1 {
+  font-size: 1.1rem;
+  color: #3f2157;
+  font-weight: 600;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: white;
+  padding: 0.5rem 7rem;
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+}
+
+.links a {
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.promptLink {
+  padding: 1rem 2rem;
+  outline: 0.15rem solid #770fd2;
+  color: #770fd2 !important;
+  text-decoration: none;
+}
+
+.mainForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: url("https://softr-prod.imgix.net/applications/adda05be-0ce0-40ae-9d74-683f93a84196/assets/928a7cce-8c7d-4b40-830d-cfe9ce98c891.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 5rem 0rem;
+}
+
+.formDetails {
+  background: white;
+  gap: 2rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  border-radius: 1rem;
+  width: 55%;
+}
+.formDetails h2 {
+  color: #240240;
+  font-size: 1.5rem;
+  font-family: "Lato", sans-serif;
+}
+.formDetails h4 {
+  color: #270346;
+  font-size: 1rem;
+  font-weight: 100;
+}
+#promptForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+#promptForm div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 2rem;
+}
+
+#promptForm div label {
+  font-size: 1rem;
+  color: #616161;
+  font-weight: 600;
+  width: 30%;
+  font-size: 0.8rem;
+  padding: 1rem;
+}
+
+#promptForm div input {
+  width: 70%;
+  padding: 0.7rem 0.5rem;
+  font-size: 0.9rem;
+  outline: none;
+  border: 0.12rem solid #bab7b7;
+  border-radius: 0.5rem;
+}
+
+#promptForm div input::placeholder {
+  color: #bab7b7;
+  font-weight: 500;
+}
+
+#promptForm div input:hover {
+  border: 0.12rem solid rgb(66, 66, 66);
+  transition: all 0.3s;
+}
+
+#promptForm div textarea {
+  width: 70%;
+  padding: 0.7rem 0.5rem;
+  font-size: 0.9rem;
+  outline: none;
+  border: 0.12rem solid #bab7b7;
+  border-radius: 0.5rem;
+  resize: none;
+}
+
+#promptForm div textarea::placeholder {
+  color: #bab7b7;
+  font-weight: 500;
+}
+
+#promptForm div textarea:hover {
+  outline: 0.12rem solid rgb(66, 66, 66);
+  transition: all 0.3s;
+}
+
+.promptTextDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: start !important;
+}
+
+.submit {
+  color: white;
+  background-color: #7710d2;
+  border-radius: 0.5rem;
+  box-shadow: rgba(17, 17, 17, 0.04) 0px 2px 4px 0px,
+    rgba(33, 33, 33, 0.08) 0px 8px 32px 0px;
+  border: none;
+  padding: 0.7rem 0rem;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 7rem 7.5rem 7rem;
+}
+
+.footerLinks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerLinks .info {
+  font-weight: 600;
+  color: black;
+  display: flex;
+  gap: 2rem;
+}
+
+.footerLinks .info a {
+  color: black;
+  text-decoration: none;
+}
+.footerLinks .info a:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+hr {
+  border: none;
+  border-bottom: 0.1rem solid #d4d2d2;
+}
