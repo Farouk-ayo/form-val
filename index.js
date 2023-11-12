@@ -1,27 +1,120 @@
+const serviceCategories = [
+  "Administrative",
+  "Creative",
+  "Customer Service",
+  "Customer Success",
+  "Education",
+  "Engineering",
+  "Entrepreneur",
+  "Executive Management",
+  "Finance",
+  "Human Resources",
+  "Information Technology",
+  "Legal",
+  "Marketing",
+  "Media And Communications",
+  "Medical",
+  "Personal Development",
+  "Public Relations",
+  "Real Estate",
+  "Religious Services",
+  "Retail",
+  "Sales",
+];
+
+function setupInput(inputElement, suggestionsElement, arrowElement) {
+  function toggleArrowAndSuggestions() {
+    arrowElement.classList.toggle("rotated");
+    suggestionsElement.classList.toggle("show");
+  }
+  arrowElement.addEventListener("click", toggleArrowAndSuggestions);
+  inputElement.addEventListener("click", toggleArrowAndSuggestions);
+
+  // Add click event listener to each li in the suggestions list
+  suggestionsElement.addEventListener("click", function (event) {
+    if (event.target.tagName === "LI") {
+      // Set the input value to the clicked li's text content
+      inputElement.value = event.target.textContent;
+      suggestionsElement.classList.remove("show");
+      arrowElement.classList.remove("rotated");
+    }
+  });
+  // Add input event listener to filter suggestions while typing
+  inputElement.addEventListener("input", function () {
+    filterSuggestions(inputElement.value.trim().toLowerCase());
+  });
+
+  // Add mouseover and mouseout event listeners to change background color on hover
+  suggestionsElement.addEventListener("mouseover", function (event) {
+    if (event.target.tagName === "LI") {
+      event.target.classList.add("hovered");
+    }
+  });
+
+  suggestionsElement.addEventListener("mouseout", function (event) {
+    if (event.target.tagName === "LI") {
+      event.target.classList.remove("hovered");
+    }
+  });
+
+  function filterSuggestions(filterText) {
+    const suggestions = suggestionsElement.querySelectorAll("li");
+    suggestions.forEach((li) => {
+      const suggestionText = li.textContent.toLowerCase();
+      if (suggestionText.includes(filterText)) {
+        li.style.display = "block"; // Show the suggestion
+      } else {
+        li.style.display = "none"; // Hide the suggestion
+      }
+    });
+  }
+
+  // Add global click event listener to close suggestions when clicking outside
+  document.addEventListener("click", function (event) {
+    if (
+      !inputElement.contains(event.target) &&
+      !suggestionsElement.contains(event.target)
+    ) {
+      suggestionsElement.classList.remove("show");
+      arrowElement.classList.remove("rotated");
+    }
+  });
+}
+
+// Setup for the first input
 const promptType = document.getElementById("promptType");
 const suggestionsType = document.querySelector(".suggestionsType");
+const arrowType = document.querySelector(".arrowDownType");
 
-// promptType.addEventListener("focus", () => {
-//   suggestionsType.style.display = "block";
-// });
+setupInput(promptType, suggestionsType, arrowType);
 
-promptType.addEventListener("blur", () => {
-  inputDivs.forEach((inputDiv) => {
-    inputDiv.classList.remove("rotated");
-  });
-  suggestionsType.classList.remove("show");
-  this.classList.remove("rotated");
-});
+// Setup for the second input
+const promptCatg = document.getElementById("promptCatg");
+const suggestionsCatg = document.querySelector(".suggestionsCatg");
+const arrowCatg = document.querySelector(".arrowDownCatg");
 
-const inputDivs = document.querySelectorAll(".inputDiv");
+setupInput(promptCatg, suggestionsCatg, arrowCatg);
 
-inputDivs.forEach((inputDiv) => {
-  inputDiv.addEventListener("click", function () {
-    // Toggle the class "rotated" to rotate the arrow
-    this.classList.toggle("rotated");
-    suggestionsType.classList.toggle("show");
-  });
-});
+// Setup for the third input
+const promptIndustry = document.getElementById("promptIndustry");
+const suggestionsIndustry = document.querySelector(".suggestionsIndustry");
+const arrowIndustry = document.querySelector(".arrowDownIndustry");
+
+setupInput(promptIndustry, suggestionsIndustry, arrowIndustry);
+
+// Setup for the fourth input
+const promptDept = document.getElementById("promptDept");
+const suggestionsDept = document.querySelector(".suggestionsDept");
+const arrowDept = document.querySelector(".arrowDownDept");
+
+setupInput(promptDept, suggestionsDept, arrowDept);
+
+// Setup for the fifth input
+const promptRole = document.getElementById("promptRole");
+const suggestionsRole = document.querySelector(".suggestionsRole");
+const arrowRole = document.querySelector(".arrowDownRole");
+
+setupInput(promptRole, suggestionsRole, arrowRole);
 
 const apiKey =
   "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";

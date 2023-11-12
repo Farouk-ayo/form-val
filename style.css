@@ -157,7 +157,7 @@
 }
 
 .eachInput textarea:hover {
-  outline: 0.12rem solid rgb(66, 66, 66);
+  border: 0.12rem solid rgb(66, 66, 66);
   transition: all 0.3s;
 }
 
@@ -217,11 +217,11 @@ hr {
   transition: transform 0.2s;
 }
 
-.rotated .arrowDown {
+.rotated {
   transform: translateY(-50%) rotate(180deg);
 }
 
-.suggestionsType {
+.suggestions {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -234,22 +234,32 @@ hr {
   border-bottom-right-radius: 0.5rem;
   box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
   display: none;
+  overflow-y: scroll;
+  max-height: 15rem;
 }
 
-.suggestionsType::-webkit-scrollbar {
+/* .suggestions::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .show {
   display: block !important;
 }
 
-.suggestionsType ul li {
-  list-style: none;
+.suggestions ul {
   padding: 0.5rem;
+}
+
+.suggestions ul li {
+  list-style: none;
+  padding: 0.7rem;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 
 .inputDiv:focus-within .arrow-icon {
   transform: rotate(180deg);
+}
+.suggestions li.hovered {
+  background-color: #e9e9e9; /* Adjust the color as needed */
 }
