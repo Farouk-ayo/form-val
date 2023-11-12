@@ -349,7 +349,6 @@ function updateSuggestions(department) {
     serviceCategories.find((category) => category.dept === department)?.roles ||
     [];
   suggestionsRoleLists.innerHTML = "";
-  console.log(promptRoleOptions);
   if (promptRoleOptions.length > 0) {
     promptRoleOptions.forEach((role) => {
       const li = document.createElement("li");
@@ -422,6 +421,71 @@ function setupInput(inputElement, suggestionsElement, arrowElement) {
   });
 }
 
+// Multiselect input
+function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
+  const selectedSuggestions = [];
+
+  function toggleArrowAndSuggestions(eventTargetValue) {
+    arrowElement.classList.toggle("rotated");
+    suggestionsElement.classList.toggle("show");
+  }
+
+  arrowElement.addEventListener("click", toggleArrowAndSuggestions);
+  inputElement.addEventListener("click", toggleArrowAndSuggestions);
+
+  // Add click event listener to each li in the suggestions list
+  suggestionsElement.addEventListener("click", function (event) {
+    if (event.target.tagName === "LI") {
+      const clickedSuggestion = event.target.textContent;
+
+      // Toggle the suggestion's selection state
+      const index = selectedSuggestions.indexOf(clickedSuggestion);
+      if (index === -1) {
+        selectedSuggestions.push(clickedSuggestion);
+        event.target.classList.add("selected");
+      } else {
+        selectedSuggestions.splice(index, 1);
+        event.target.classList.remove("selected");
+      }
+
+      updateInputValue();
+    }
+  });
+
+  // Update the input value based on selected suggestions
+  function updateInputValue() {
+    inputElement.value = selectedSuggestions.join(", ");
+  }
+
+  // Add input event listener to filter suggestions while typing
+  inputElement.addEventListener("input", function () {
+    filterSuggestions(inputElement.value.trim().toLowerCase());
+  });
+
+  function filterSuggestions(filterText) {
+    const suggestions = suggestionsElement.querySelectorAll("li");
+    suggestions.forEach((li) => {
+      const suggestionText = li.textContent.toLowerCase();
+      if (suggestionText.includes(filterText)) {
+        li.style.display = "block"; // Show the suggestion
+      } else {
+        li.style.display = "none"; // Hide the suggestion
+      }
+    });
+  }
+
+  // Add global click event listener to close suggestions when clicking outside
+  document.addEventListener("click", function (event) {
+    if (
+      !inputElement.contains(event.target) &&
+      !suggestionsElement.contains(event.target)
+    ) {
+      suggestionsElement.classList.remove("show");
+      arrowElement.classList.remove("rotated");
+    }
+  });
+}
+
 // Setup for the first input
 const promptType = document.getElementById("promptType");
 const suggestionsType = document.querySelector(".suggestionsType");
@@ -434,7 +498,7 @@ const promptCatg = document.getElementById("promptCatg");
 const suggestionsCatg = document.querySelector(".suggestionsCatg");
 const arrowCatg = document.querySelector(".arrowDownCatg");
 
-setupInput(promptCatg, suggestionsCatg, arrowCatg);
+setupMultiSelectInput(promptCatg, suggestionsCatg, arrowCatg);
 
 // Setup for the third input
 const promptIndustry = document.getElementById("promptIndustry");
@@ -457,6 +521,21 @@ const arrowRole = document.querySelector(".arrowDownRole");
 
 setupInput(promptRole, suggestionsRole, arrowRole);
 
+document.addEventListener("DOMContentLoaded", function () {
+  const sourceLinkInput = document.getElementById("sourceLink");
+  const errorMessage = document.querySelector(".errorMssg");
+
+  function validateInput() {
+    if (!sourceLinkInput.checkValidity()) {
+      errorMessage.style.display = "flex";
+    } else {
+      errorMessage.style.display = "none";
+    }
+  }
+  sourceLinkInput.addEventListener("blur", validateInput);
+  sourceLinkInput.addEventListener("input", validateInput);
+});
+
 const apiKey =
   "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
 const baseId = "app7VXdu27jaUQjIV";
@@ -475,14 +554,14 @@ const populateDropdown = async (elementId, tableName) => {
     console.log(data);
 
     // Now you can populate the dropdown with the retrieved data
-    // const selectElement = document.getElementById(elementId);
-    // data.records.forEach((record) => {
-    //   let option = document.createElement("option");
-    //   option.value = record.id;
-    //   option.textContent = record.fields["Name"];
-    //   selectElement.appendChild(option);
-    // });
-    // console.log(data.records);
+    const selectElement = document.getElementById(elementId);
+    data.records.forEach((record) => {
+      let option = document.createElement("option");
+      option.value = record.id;
+      option.textContent = record.fields["Name"];
+      selectElement.appendChild(option);
+    });
+    console.log(data.records);
   } catch (error) {
     console.error("Error:", error);
   }
@@ -506,28 +585,28 @@ function addNewEntry(tableName, entryName, callback) {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Populate dropdowns when the document is loaded
-  // populateDropdown("promptCategory", "Categories");
-  // populateDropdown("promptType", "Prompt Types");
-  // populateDropdown("industry", "Industry");
-  // populateDropdown("department", "Departments");
+  populateDropdown("promptCategory", "Categories");
+  populateDropdown("promptType", "Prompt Types");
+  populateDropdown("industry", "Industry");
+  populateDropdown("department", "Departments");
   // ... add more dropdown populations as needed
   // Event listeners for adding new entries
-  // document.getElementById("addCategory").addEventListener("click", function () {
-  //   const newCategory = prompt("Enter new category name:");
-  //   if (newCategory) {
-  //     addNewEntry("Categories", newCategory, function (data) {
-  //       // Update the 'promptCategory' dropdown
-  //       populateDropdown("promptCategory", "Categories");
-  //     });
-  //   }
-  // });
+  document.getElementById("addCategory").addEventListener("click", function () {
+    const newCategory = prompt("Enter new category name:");
+    if (newCategory) {
+      addNewEntry("Categories", newCategory, function (data) {
+        // Update the 'promptCategory' dropdown
+        populateDropdown("promptCategory", "Categories");
+      });
+    }
+  });
   // ... similar event listeners for other add buttons
   // Handle form submission
-  // document
-  //   .getElementById("promptForm")
-  //   .addEventListener("submit", function (event) {
-  //     event.preventDefault();
-  // Handle form data submission to Airtable
-  // ... this would be similar to the createRecord function in the previous example
-  // });
+  document
+    .getElementById("promptForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      // Handle form data submission to Airtable
+      // ... this would be similar to the createRecord function in the previous example
+    });
 });
