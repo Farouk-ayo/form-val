@@ -1,4 +1,318 @@
 const serviceCategories = [
+  {
+    dept: "Administrative",
+    roles: [
+      "Administrative Assistant",
+      "Data Entry Clerk",
+      "Executive Assistant",
+      "Office Manager",
+      "Receptionist",
+    ],
+  },
+
+  {
+    dept: "Creative",
+    roles: [
+      "Art Director",
+      "Video Editor",
+      "Web Designer",
+      "Graphic Designer",
+      "UX Designer",
+      "Illustrator",
+      "Animator",
+    ],
+  },
+
+  {
+    dept: "Customer Service",
+    roles: [
+      "Technical Support Specialist",
+      "Customer Service Team Lead",
+      "Customer Service Rep",
+      "Call Center Agent",
+    ],
+  },
+
+  {
+    dept: "Customer Success",
+    roles: [
+      "Account Manager",
+      "Onboarding Specialist",
+      "Customer Success Manager",
+      "Customer Success Coordinator",
+      "Customer Success Analyst",
+    ],
+  },
+
+  {
+    dept: "Education",
+    roles: ["Teacher", "Curriculum Developer", "Professor", "Tutor"],
+  },
+
+  {
+    dept: "Engineering",
+    roles: [
+      "Software Engineer",
+      "Civil Engineer",
+      "Mechanical Engineer",
+      "Electrical Engineer",
+    ],
+  },
+
+  {
+    dept: "Entrepreneur",
+    roles: [
+      "Startup Advisor",
+      "Founder",
+      "Chief Marketing Officer (CMO)",
+      "Chief Technology Officer (CTO)",
+      "Chief Operating Officer (COO)",
+      "Chief Strategy Officer (CSO)",
+      "Chief Executive Officer (CEO)",
+      "Chief Human Resources Officer (CHRO)",
+      "Chief Financial Officer (CFO)",
+      "Chief Information Security Officer (CISO)",
+    ],
+  },
+
+  {
+    dept: "Executive Management",
+    roles: [
+      "Chief Information Security Officer (CISO)",
+      "Chief Executive Officer (CEO)",
+      "Chief Human Resources Officer (CHRO)",
+      "Chief Operating Officer (COO)",
+      "Chief Financial Officer (CFO)",
+      "Chief Marketing Officer (CMO)",
+      "Chief Technology Officer (CTO)",
+      "Chief Strategy Officer (CSO)",
+    ],
+  },
+  {
+    dept: "Finance",
+    roles: [
+      "Accountant",
+      "Accounts Receivable Specialist",
+      "Accounts Payable Specialist",
+      "Financial Planner",
+      "Financial Analyst",
+      "Chief Financial Officer (CFO)",
+    ],
+  },
+
+  {
+    dept: "Human Resources",
+    roles: [
+      "Recruiter",
+      "Employee Relations Specialist",
+      "HRIS Specialist",
+      "Compensation And Benefits Specialist",
+      "Training And Development Specialist",
+      "HR Analyst",
+      "HR Manager",
+      "Chief Human Resources Officer (CHRO)",
+    ],
+  },
+
+  {
+    dept: "Information Technology",
+    roles: [],
+  },
+
+  {
+    dept: "Legal",
+    roles: [
+      "Securities Lawyer",
+      "Personal Injury Lawyer",
+      "Family Lawyer",
+      "Criminal Defense Lawyer",
+      "Real Estate Lawyer",
+      "Trust And Estates Lawyer",
+      "Civil Rights Lawyer",
+      "Bankruptcy Lawyer",
+      "Immigration Lawyer",
+      "Paralegal",
+      "Intellectual Property Lawyer",
+      "Employment Lawyer",
+      "Tax Lawyer",
+      "Corporate Lawyer",
+    ],
+  },
+
+  {
+    dept: "Marketing",
+    roles: [
+      "Marketing Analyst",
+      "Event Marketing Specialist",
+      "E-Commerce Manager",
+      "SEO Specialist",
+      "Social Media Manager",
+      "PPC Specialist",
+      "Digital Marketing Specialist",
+      "Amazon FBA Ecommerce Manager",
+      "Influencer Marketing Specialist",
+      "Lead Generation Specialist",
+      "B2B Marketing Specialist",
+      "Paid Social Media Specialist",
+      "B2B Content Marketing Manager",
+      "Account-Based Marketing Manager",
+      "Product Marketing Manager",
+      "Creative Strategist",
+      "Brand Manager",
+      "Marketing Manager",
+      "Email Marketing Specialist",
+      "Content Marketing Specialist",
+      "Marketing Coordinator",
+      "Market Research Analyst",
+      "Copywriter",
+      "Marketing Operations",
+      "Content Creator",
+      "Chief Marketing Officer (CMO)",
+    ],
+  },
+
+  {
+    dept: "Media And Communication",
+    roles: ["Content Writer", "Journalist", "Public Relations Specialist"],
+  },
+
+  {
+    dept: "Medical",
+    roles: [
+      "Registered Nurse",
+      "Obstetrician-Gynecologist (OB-GYN)",
+      "Family Doctor",
+      "Pediatrician",
+      "Counseling Psychologist",
+      "Physical Therapist",
+      "Pharmacist",
+      "Physician",
+      "Dentist",
+      "Chiropractor",
+      "Psychiatrist",
+      "Neurosurgeon",
+      "Medical Technologist",
+      "Clinical Psychologist",
+      "Speech-Language Pathologist",
+      "Occupational Therapist",
+      "Psychologist",
+      "Dietitian",
+    ],
+  },
+
+  {
+    dept: "Personal Development",
+    roles: [
+      "Mindfulness Or Meditation Coach",
+      "Art Or Creativity Coach",
+      "Relationship Coach",
+      "Financial Coach",
+      "Career Coach",
+      "Image Consultant Or Personal Stylist",
+      "Executive Coach",
+      "Sports Coach",
+      "Fitness Trainer",
+      "Parenting Coach",
+      "Professional Organizer",
+      "Life Coach",
+      "Nutritionist",
+      "Health Coach",
+      "Strategic Thinking",
+    ],
+  },
+
+  {
+    dept: "Public Relations",
+    roles: [
+      "PR Specialist",
+      "Crisis Communications Manager",
+      "Social Media Strategist",
+      "PR Manager",
+    ],
+  },
+
+  {
+    dept: "Real Estate",
+    roles: [
+      "Leasing Agent",
+      "Real Estate Analyst",
+      "Mortgage Loan Officer",
+      "Real Estate Developer",
+      "Property Manager",
+      "Real Estate Broker",
+      "Real Estate Investor",
+      "Mortgage Broker",
+      "Real Estate Appraiser",
+      "Real Estate Agent",
+    ],
+  },
+
+  {
+    dept: "Religious Services",
+    roles: ["Priest", "Religious Educator", "Youth Minister", "Imam", "Rabbi"],
+  },
+
+  {
+    dept: "Retail",
+    roles: [
+      "Assistant Store Manager",
+      "Retail Buyer",
+      "Store Operations Manager",
+      "Store Manager",
+      "Department Manager",
+      "District Or Regional Manager",
+      "Inventory Specialist",
+      "Visual Merchandiser",
+      "Sales Associate",
+    ],
+  },
+
+  {
+    dept: "Sales",
+    roles: [
+      "Sales Engineer",
+      "Sales Manager",
+      "Inside Sales Representative",
+      "Outside Sales Representative",
+      "Business Development Manager",
+      "Sales Development Representative",
+      "Account Executive",
+      "Sales Analyst",
+      "Sales Operations",
+    ],
+  },
+];
+
+const promptTypeOptions = ["free", "Membership", "Paid"];
+const suggestionsTypeLists = document.querySelector(".suggestionsType ul");
+suggestionsTypeLists.innerHTML = "";
+promptTypeOptions.forEach((option) => {
+  const li = document.createElement("li");
+  li.textContent = option;
+  suggestionsTypeLists.appendChild(li);
+});
+
+const promptCatgOptions = ["Marketing", "Options", "Strategy"];
+const suggestionsCatgLists = document.querySelector(".suggestionsCatg ul");
+suggestionsCatgLists.innerHTML = "";
+promptCatgOptions.forEach((option) => {
+  const li = document.createElement("li");
+  li.textContent = option;
+  suggestionsCatgLists.appendChild(li);
+});
+
+const promptIndustryOptions = ["Education", "Entertainment", "Hospitality"];
+const suggestionIndustryLists = document.querySelector(
+  ".suggestionsIndustry ul"
+);
+suggestionIndustryLists.innerHTML = "";
+promptIndustryOptions.forEach((option) => {
+  const li = document.createElement("li");
+  li.textContent = option;
+  suggestionIndustryLists.appendChild(li);
+});
+
+const promptDeptOptions = [
   "Administrative",
   "Creative",
   "Customer Service",
@@ -21,9 +335,34 @@ const serviceCategories = [
   "Retail",
   "Sales",
 ];
+const suggestionsDeptLists = document.querySelector(".suggestionsDept ul");
+suggestionsDeptLists.innerHTML = "";
+promptDeptOptions.forEach((option) => {
+  const li = document.createElement("li");
+  li.textContent = option;
+  suggestionsDeptLists.appendChild(li);
+});
 
+function updateSuggestions(department) {
+  const suggestionsRoleLists = document.querySelector(`.suggestionsRole ul`);
+  const promptRoleOptions =
+    serviceCategories.find((category) => category.dept === department)?.roles ||
+    [];
+  suggestionsRoleLists.innerHTML = "";
+  console.log(promptRoleOptions);
+  if (promptRoleOptions.length > 0) {
+    promptRoleOptions.forEach((role) => {
+      const li = document.createElement("li");
+      li.textContent = role;
+      suggestionsRoleLists.appendChild(li);
+    });
+  }
+}
 function setupInput(inputElement, suggestionsElement, arrowElement) {
-  function toggleArrowAndSuggestions() {
+  function toggleArrowAndSuggestions(eventTargetValue) {
+    if (promptDeptOptions.includes(eventTargetValue)) {
+      updateSuggestions(eventTargetValue);
+    }
     arrowElement.classList.toggle("rotated");
     suggestionsElement.classList.toggle("show");
   }
@@ -34,7 +373,9 @@ function setupInput(inputElement, suggestionsElement, arrowElement) {
   suggestionsElement.addEventListener("click", function (event) {
     if (event.target.tagName === "LI") {
       // Set the input value to the clicked li's text content
+
       inputElement.value = event.target.textContent;
+      toggleArrowAndSuggestions(event.target.textContent);
       suggestionsElement.classList.remove("show");
       arrowElement.classList.remove("rotated");
     }
@@ -134,14 +475,14 @@ const populateDropdown = async (elementId, tableName) => {
     console.log(data);
 
     // Now you can populate the dropdown with the retrieved data
-    const selectElement = document.getElementById(elementId);
-    data.records.forEach((record) => {
-      let option = document.createElement("option");
-      option.value = record.id;
-      option.textContent = record.fields["Name"];
-      selectElement.appendChild(option);
-    });
-    console.log(data.records);
+    // const selectElement = document.getElementById(elementId);
+    // data.records.forEach((record) => {
+    //   let option = document.createElement("option");
+    //   option.value = record.id;
+    //   option.textContent = record.fields["Name"];
+    //   selectElement.appendChild(option);
+    // });
+    // console.log(data.records);
   } catch (error) {
     console.error("Error:", error);
   }
@@ -165,30 +506,28 @@ function addNewEntry(tableName, entryName, callback) {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Populate dropdowns when the document is loaded
-  populateDropdown("promptCategory", "Categories");
-  populateDropdown("promptType", "Prompt Types");
-  populateDropdown("industry", "Industry");
-  populateDropdown("department", "Departments");
+  // populateDropdown("promptCategory", "Categories");
+  // populateDropdown("promptType", "Prompt Types");
+  // populateDropdown("industry", "Industry");
+  // populateDropdown("department", "Departments");
   // ... add more dropdown populations as needed
-
   // Event listeners for adding new entries
-  document.getElementById("addCategory").addEventListener("click", function () {
-    const newCategory = prompt("Enter new category name:");
-    if (newCategory) {
-      addNewEntry("Categories", newCategory, function (data) {
-        // Update the 'promptCategory' dropdown
-        populateDropdown("promptCategory", "Categories");
-      });
-    }
-  });
+  // document.getElementById("addCategory").addEventListener("click", function () {
+  //   const newCategory = prompt("Enter new category name:");
+  //   if (newCategory) {
+  //     addNewEntry("Categories", newCategory, function (data) {
+  //       // Update the 'promptCategory' dropdown
+  //       populateDropdown("promptCategory", "Categories");
+  //     });
+  //   }
+  // });
   // ... similar event listeners for other add buttons
-
   // Handle form submission
-  document
-    .getElementById("promptForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-      // Handle form data submission to Airtable
-      // ... this would be similar to the createRecord function in the previous example
-    });
+  // document
+  //   .getElementById("promptForm")
+  //   .addEventListener("submit", function (event) {
+  //     event.preventDefault();
+  // Handle form data submission to Airtable
+  // ... this would be similar to the createRecord function in the previous example
+  // });
 });
