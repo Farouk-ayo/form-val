@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI for Work: Prompts Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Numans&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Numans", sans-serif;
+      }
+
+      .mainForm {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url("https://softr-prod.imgix.net/applications/adda05be-0ce0-40ae-9d74-683f93a84196/assets/928a7cce-8c7d-4b40-830d-cfe9ce98c891.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 5rem 0rem;
+      }
+
+      .formDetails {
+        background: white;
+        gap: 2rem;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        border-radius: 1rem;
+        width: 55%;
+      }
+      .formDetails h2 {
+        color: #240240;
+        font-size: 1.5rem;
+        font-family: "Lato", sans-serif;
+      }
+      .formDetails h4 {
+        color: #270346;
+        font-size: 1rem;
+        font-weight: 100;
+      }
+      .promptForm {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 100%;
+        position: relative;
+      }
+
+      .eachInput {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        gap: 2rem;
+        position: relative;
+      }
+      .eachInput span {
+        width: 70%;
+        position: relative;
+      }
+
+      .eachInput label {
+        font-size: 1rem;
+        color: #616161;
+        font-weight: 600;
+        width: 30%;
+        font-size: 0.8rem;
+        padding: 1rem;
+      }
+
+      .inputDiv {
+        position: relative;
+        width: 100%;
+      }
+
+      .inputDiv input {
+        width: 100%;
+        padding: 0.7rem 0.5rem;
+        font-size: 0.9rem;
+        outline: none;
+        border: 0.12rem solid #bab7b7;
+        border-radius: 0.5rem;
+      }
+
+      .eachInput input::placeholder {
+        color: #bab7b7;
+        font-weight: 500;
+      }
+
+      .eachInput input:hover {
+        border: 0.12rem solid rgb(66, 66, 66);
+        transition: all 0.3s;
+      }
+
+      .inputDiv textarea {
+        width: 100%;
+        padding: 0.7rem 0.5rem;
+        font-size: 0.9rem;
+        outline: none;
+        border: 0.12rem solid #bab7b7;
+        border-radius: 0.5rem;
+        resize: none;
+      }
+
+      .eachInput textarea::placeholder {
+        color: #bab7b7;
+        font-weight: 500;
+      }
+
+      .eachInput textarea:hover {
+        border: 0.12rem solid rgb(66, 66, 66);
+        transition: all 0.3s;
+      }
+
+      .submit {
+        color: white;
+        background-color: #7710d2;
+        border-radius: 0.5rem;
+        box-shadow: rgba(17, 17, 17, 0.04) 0px 2px 4px 0px,
+          rgba(33, 33, 33, 0.08) 0px 8px 32px 0px;
+        border: none;
+        padding: 0.7rem 0rem;
+        font-weight: 300;
+        font-size: 0.9rem;
+      }
+
+      .arrowDown {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .rotated {
+        transform: translateY(-50%) rotate(180deg);
+      }
+
+      .suggestions {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        gap: 0.5rem;
+        background-color: white;
+        width: 100%;
+        z-index: 4;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+        display: none;
+        overflow-y: scroll;
+        max-height: 15rem;
+      }
+
+      .show {
+        display: block !important;
+      }
+
+      .suggestions ul li {
+        list-style: none;
+        padding: 0.8rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+
+      .inputDiv:focus-within .arrow-icon {
+        transform: rotate(180deg);
+      }
+      .suggestions li.hovered {
+        background-color: #e9e9e9;
+      }
+      .suggestions li {
+        transition: background-color 0.3s ease;
+      }
+
+      .suggestions li.selected {
+        background-color: #e9e9e9;
+      }
+
+      .errorMssg {
+        /* margin-top: 0.5rem; */
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+        position: absolute;
+        bottom: -1.2rem;
+        display: none;
+      }
+      .error-message {
+        color: #de350b;
+        font-size: 0.7rem;
+      }
+
+      #sourceLink:focus:invalid {
+        border-color: #de350b;
+      }
+
+      .selected {
+        background-color: #d4d2d2;
+      }
+    </style>
+    <script>
+      const serviceCategories = [
+        {
+          dept: "Administrative",
+          roles: [
+            "Administrative Assistant",
+            "Data Entry Clerk",
+            "Executive Assistant",
+            "Office Manager",
+            "Receptionist",
+          ],
+        },
+
+        {
+          dept: "Creative",
+          roles: [
+            "Art Director",
+            "Video Editor",
+            "Web Designer",
+            "Graphic Designer",
+            "UX Designer",
+            "Illustrator",
+            "Animator",
+          ],
+        },
+
+        {
+          dept: "Customer Service",
+          roles: [
+            "Technical Support Specialist",
+            "Customer Service Team Lead",
+            "Customer Service Rep",
+            "Call Center Agent",
+          ],
+        },
+
+        {
+          dept: "Customer Success",
+          roles: [
+            "Account Manager",
+            "Onboarding Specialist",
+            "Customer Success Manager",
+            "Customer Success Coordinator",
+            "Customer Success Analyst",
+          ],
+        },
+
+        {
+          dept: "Education",
+          roles: ["Teacher", "Curriculum Developer", "Professor", "Tutor"],
+        },
+
+        {
+          dept: "Engineering",
+          roles: [
+            "Software Engineer",
+            "Civil Engineer",
+            "Mechanical Engineer",
+            "Electrical Engineer",
+          ],
+        },
+
+        {
+          dept: "Entrepreneur",
+          roles: [
+            "Startup Advisor",
+            "Founder",
+            "Chief Marketing Officer (CMO)",
+            "Chief Technology Officer (CTO)",
+            "Chief Operating Officer (COO)",
+            "Chief Strategy Officer (CSO)",
+            "Chief Executive Officer (CEO)",
+            "Chief Human Resources Officer (CHRO)",
+            "Chief Financial Officer (CFO)",
+            "Chief Information Security Officer (CISO)",
+          ],
+        },
+
+        {
+          dept: "Executive Management",
+          roles: [
+            "Chief Information Security Officer (CISO)",
+            "Chief Executive Officer (CEO)",
+            "Chief Human Resources Officer (CHRO)",
+            "Chief Operating Officer (COO)",
+            "Chief Financial Officer (CFO)",
+            "Chief Marketing Officer (CMO)",
+            "Chief Technology Officer (CTO)",
+            "Chief Strategy Officer (CSO)",
+          ],
+        },
+        {
+          dept: "Finance",
+          roles: [
+            "Accountant",
+            "Accounts Receivable Specialist",
+            "Accounts Payable Specialist",
+            "Financial Planner",
+            "Financial Analyst",
+            "Chief Financial Officer (CFO)",
+          ],
+        },
+
+        {
+          dept: "Human Resources",
+          roles: [
+            "Recruiter",
+            "Employee Relations Specialist",
+            "HRIS Specialist",
+            "Compensation And Benefits Specialist",
+            "Training And Development Specialist",
+            "HR Analyst",
+            "HR Manager",
+            "Chief Human Resources Officer (CHRO)",
+          ],
+        },
+
+        {
+          dept: "Information Technology",
+          roles: [],
+        },
+
+        {
+          dept: "Legal",
+          roles: [
+            "Securities Lawyer",
+            "Personal Injury Lawyer",
+            "Family Lawyer",
+            "Criminal Defense Lawyer",
+            "Real Estate Lawyer",
+            "Trust And Estates Lawyer",
+            "Civil Rights Lawyer",
+            "Bankruptcy Lawyer",
+            "Immigration Lawyer",
+            "Paralegal",
+            "Intellectual Property Lawyer",
+            "Employment Lawyer",
+            "Tax Lawyer",
+            "Corporate Lawyer",
+          ],
+        },
+
+        {
+          dept: "Marketing",
+          roles: [
+            "Marketing Analyst",
+            "Event Marketing Specialist",
+            "E-Commerce Manager",
+            "SEO Specialist",
+            "Social Media Manager",
+            "PPC Specialist",
+            "Digital Marketing Specialist",
+            "Amazon FBA Ecommerce Manager",
+            "Influencer Marketing Specialist",
+            "Lead Generation Specialist",
+            "B2B Marketing Specialist",
+            "Paid Social Media Specialist",
+            "B2B Content Marketing Manager",
+            "Account-Based Marketing Manager",
+            "Product Marketing Manager",
+            "Creative Strategist",
+            "Brand Manager",
+            "Marketing Manager",
+            "Email Marketing Specialist",
+            "Content Marketing Specialist",
+            "Marketing Coordinator",
+            "Market Research Analyst",
+            "Copywriter",
+            "Marketing Operations",
+            "Content Creator",
+            "Chief Marketing Officer (CMO)",
+          ],
+        },
+
+        {
+          dept: "Media And Communication",
+          roles: [
+            "Content Writer",
+            "Journalist",
+            "Public Relations Specialist",
+          ],
+        },
+
+        {
+          dept: "Medical",
+          roles: [
+            "Registered Nurse",
+            "Obstetrician-Gynecologist (OB-GYN)",
+            "Family Doctor",
+            "Pediatrician",
+            "Counseling Psychologist",
+            "Physical Therapist",
+            "Pharmacist",
+            "Physician",
+            "Dentist",
+            "Chiropractor",
+            "Psychiatrist",
+            "Neurosurgeon",
+            "Medical Technologist",
+            "Clinical Psychologist",
+            "Speech-Language Pathologist",
+            "Occupational Therapist",
+            "Psychologist",
+            "Dietitian",
+          ],
+        },
+
+        {
+          dept: "Personal Development",
+          roles: [
+            "Mindfulness Or Meditation Coach",
+            "Art Or Creativity Coach",
+            "Relationship Coach",
+            "Financial Coach",
+            "Career Coach",
+            "Image Consultant Or Personal Stylist",
+            "Executive Coach",
+            "Sports Coach",
+            "Fitness Trainer",
+            "Parenting Coach",
+            "Professional Organizer",
+            "Life Coach",
+            "Nutritionist",
+            "Health Coach",
+            "Strategic Thinking",
+          ],
+        },
+
+        {
+          dept: "Public Relations",
+          roles: [
+            "PR Specialist",
+            "Crisis Communications Manager",
+            "Social Media Strategist",
+            "PR Manager",
+          ],
+        },
+
+        {
+          dept: "Real Estate",
+          roles: [
+            "Leasing Agent",
+            "Real Estate Analyst",
+            "Mortgage Loan Officer",
+            "Real Estate Developer",
+            "Property Manager",
+            "Real Estate Broker",
+            "Real Estate Investor",
+            "Mortgage Broker",
+            "Real Estate Appraiser",
+            "Real Estate Agent",
+          ],
+        },
+
+        {
+          dept: "Religious Services",
+          roles: [
+            "Priest",
+            "Religious Educator",
+            "Youth Minister",
+            "Imam",
+            "Rabbi",
+          ],
+        },
+
+        {
+          dept: "Retail",
+          roles: [
+            "Assistant Store Manager",
+            "Retail Buyer",
+            "Store Operations Manager",
+            "Store Manager",
+            "Department Manager",
+            "District Or Regional Manager",
+            "Inventory Specialist",
+            "Visual Merchandiser",
+            "Sales Associate",
+          ],
+        },
+
+        {
+          dept: "Sales",
+          roles: [
+            "Sales Engineer",
+            "Sales Manager",
+            "Inside Sales Representative",
+            "Outside Sales Representative",
+            "Business Development Manager",
+            "Sales Development Representative",
+            "Account Executive",
+            "Sales Analyst",
+            "Sales Operations",
+          ],
+        },
+      ];
+
+      const promptTypeOptions = ["Free", "Membership", "Paid"];
+      const suggestionsTypeLists = document.querySelector(
+        ".suggestionsType ul"
+      );
+      suggestionsTypeLists.innerHTML = "";
+      promptTypeOptions.forEach((option) => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        suggestionsTypeLists.appendChild(li);
+      });
+
+      const promptCatgOptions = ["Marketing", "Options", "Strategy"];
+      const suggestionsCatgLists = document.querySelector(
+        ".suggestionsCatg ul"
+      );
+      suggestionsCatgLists.innerHTML = "";
+      promptCatgOptions.forEach((option) => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        suggestionsCatgLists.appendChild(li);
+      });
+
+      const promptIndustryOptions = [
+        "Education",
+        "Entertainment",
+        "Hospitality",
+      ];
+      const suggestionIndustryLists = document.querySelector(
+        ".suggestionsIndustry ul"
+      );
+      suggestionIndustryLists.innerHTML = "";
+      promptIndustryOptions.forEach((option) => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        suggestionIndustryLists.appendChild(li);
+      });
+
+      const promptDeptOptions = [
+        "Administrative",
+        "Creative",
+        "Customer Service",
+        "Customer Success",
+        "Education",
+        "Engineering",
+        "Entrepreneur",
+        "Executive Management",
+        "Finance",
+        "Human Resources",
+        "Information Technology",
+        "Legal",
+        "Marketing",
+        "Media And Communications",
+        "Medical",
+        "Personal Development",
+        "Public Relations",
+        "Real Estate",
+        "Religious Services",
+        "Retail",
+        "Sales",
+      ];
+      const suggestionsDeptLists = document.querySelector(
+        ".suggestionsDept ul"
+      );
+      suggestionsDeptLists.innerHTML = "";
+      promptDeptOptions.forEach((option) => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        suggestionsDeptLists.appendChild(li);
+      });
+
+      function updateSuggestions(department) {
+        const suggestionsRoleLists =
+          document.querySelector(`.suggestionsRole ul`);
+        const promptRoleOptions =
+          serviceCategories.find((category) => category.dept === department)
+            ?.roles || [];
+        suggestionsRoleLists.innerHTML = "";
+        if (promptRoleOptions.length > 0) {
+          promptRoleOptions.forEach((role) => {
+            const li = document.createElement("li");
+            li.textContent = role;
+            suggestionsRoleLists.appendChild(li);
+          });
+        }
+      }
+      function setupInput(inputElement, suggestionsElement, arrowElement) {
+        function toggleArrowAndSuggestions(eventTargetValue) {
+          if (promptDeptOptions.includes(eventTargetValue)) {
+            updateSuggestions(eventTargetValue);
+          }
+          arrowElement.classList.toggle("rotated");
+          suggestionsElement.classList.toggle("show");
+        }
+        arrowElement.addEventListener("click", toggleArrowAndSuggestions);
+        inputElement.addEventListener("click", toggleArrowAndSuggestions);
+
+        // Add click event listener to each li in the suggestions list
+        suggestionsElement.addEventListener("click", function (event) {
+          if (event.target.tagName === "LI") {
+            // Set the input value to the clicked li's text content
+
+            inputElement.value = event.target.textContent;
+            toggleArrowAndSuggestions(event.target.textContent);
+            suggestionsElement.classList.remove("show");
+            arrowElement.classList.remove("rotated");
+          }
+        });
+        // Add input event listener to filter suggestions while typing
+        inputElement.addEventListener("input", function () {
+          filterSuggestions(inputElement.value.trim().toLowerCase());
+        });
+
+        // Add mouseover and mouseout event listeners to change background color on hover
+        suggestionsElement.addEventListener("mouseover", function (event) {
+          if (event.target.tagName === "LI") {
+            event.target.classList.add("hovered");
+          }
+        });
+
+        suggestionsElement.addEventListener("mouseout", function (event) {
+          if (event.target.tagName === "LI") {
+            event.target.classList.remove("hovered");
+          }
+        });
+
+        function filterSuggestions(filterText) {
+          const suggestions = suggestionsElement.querySelectorAll("li");
+          suggestions.forEach((li) => {
+            const suggestionText = li.textContent.toLowerCase();
+            if (suggestionText.includes(filterText)) {
+              li.style.display = "block";
+            } else {
+              li.style.display = "none";
+            }
+          });
+        }
+
+        // Add global click event listener to close suggestions when clicking outside
+        document.addEventListener("click", function (event) {
+          if (
+            !inputElement.contains(event.target) &&
+            !suggestionsElement.contains(event.target)
+          ) {
+            suggestionsElement.classList.remove("show");
+            arrowElement.classList.remove("rotated");
+          }
+        });
+      }
+
+      // Multiselect input
+      function setupMultiSelectInput(
+        inputElement,
+        suggestionsElement,
+        arrowElement
+      ) {
+        const selectedSuggestions = [];
+
+        function toggleArrowAndSuggestions(eventTargetValue) {
+          arrowElement.classList.toggle("rotated");
+          suggestionsElement.classList.toggle("show");
+        }
+
+        arrowElement.addEventListener("click", toggleArrowAndSuggestions);
+        inputElement.addEventListener("click", toggleArrowAndSuggestions);
+
+        // Add click event listener to each li in the suggestions list
+        suggestionsElement.addEventListener("click", function (event) {
+          if (event.target.tagName === "LI") {
+            const clickedSuggestion = event.target.textContent;
+
+            // Toggle the suggestion's selection state
+            const index = selectedSuggestions.indexOf(clickedSuggestion);
+            if (index === -1) {
+              selectedSuggestions.push(clickedSuggestion);
+              event.target.classList.add("selected");
+            } else {
+              selectedSuggestions.splice(index, 1);
+              event.target.classList.remove("selected");
+            }
+
+            updateInputValue();
+          }
+        });
+
+        // Update the input value based on selected suggestions
+        function updateInputValue() {
+          inputElement.value = selectedSuggestions.join(", ");
+        }
+
+        // Add input event listener to filter suggestions while typing
+        inputElement.addEventListener("input", function () {
+          filterSuggestions(inputElement.value.trim().toLowerCase());
+        });
+
+        function filterSuggestions(filterText) {
+          const suggestions = suggestionsElement.querySelectorAll("li");
+          suggestions.forEach((li) => {
+            const suggestionText = li.textContent.toLowerCase();
+            if (suggestionText.includes(filterText)) {
+              li.style.display = "block"; // Show the suggestion
+            } else {
+              li.style.display = "none"; // Hide the suggestion
+            }
+          });
+        }
+
+        // Add global click event listener to close suggestions when clicking outside
+        document.addEventListener("click", function (event) {
+          if (
+            !inputElement.contains(event.target) &&
+            !suggestionsElement.contains(event.target)
+          ) {
+            suggestionsElement.classList.remove("show");
+            arrowElement.classList.remove("rotated");
+          }
+        });
+      }
+
+      // Setup for the first input
+      const promptType = document.getElementById("promptType");
+      const suggestionsType = document.querySelector(".suggestionsType");
+      const arrowType = document.querySelector(".arrowDownType");
+
+      setupInput(promptType, suggestionsType, arrowType);
+
+      // Setup for the second input
+      const promptCatg = document.getElementById("promptCatg");
+      const suggestionsCatg = document.querySelector(".suggestionsCatg");
+      const arrowCatg = document.querySelector(".arrowDownCatg");
+
+      setupMultiSelectInput(promptCatg, suggestionsCatg, arrowCatg);
+
+      // Setup for the third input
+      const promptIndustry = document.getElementById("promptIndustry");
+      const suggestionsIndustry = document.querySelector(
+        ".suggestionsIndustry"
+      );
+      const arrowIndustry = document.querySelector(".arrowDownIndustry");
+
+      setupInput(promptIndustry, suggestionsIndustry, arrowIndustry);
+
+      // Setup for the fourth input
+      const promptDept = document.getElementById("promptDept");
+      const suggestionsDept = document.querySelector(".suggestionsDept");
+      const arrowDept = document.querySelector(".arrowDownDept");
+
+      setupInput(promptDept, suggestionsDept, arrowDept);
+
+      // Setup for the fifth input
+      const promptRole = document.getElementById("promptRole");
+      const suggestionsRole = document.querySelector(".suggestionsRole");
+      const arrowRole = document.querySelector(".arrowDownRole");
+
+      setupInput(promptRole, suggestionsRole, arrowRole);
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const sourceLinkInput = document.getElementById("sourceLink");
+        const errorMessage = document.querySelector(".errorMssg");
+
+        function validateInput() {
+          if (!sourceLinkInput.checkValidity()) {
+            errorMessage.style.display = "flex";
+          } else {
+            errorMessage.style.display = "none";
+          }
+        }
+        sourceLinkInput.addEventListener("blur", validateInput);
+        sourceLinkInput.addEventListener("input", validateInput);
+      });
+
+      const apiKey =
+        "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
+      const baseId = "app7VXdu27jaUQjIV";
+      const tableId = "tblWxjOgN18FFMQ6k";
+      const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+
+      const addNewEntry = async (formData) => {
+        const role = formData.get("promptRole");
+        const sourceLink = formData.get("sourceLink");
+        const promptCatg = formData.get("promptCatg");
+        const promptTitle = formData.get("promptTitle");
+        const promptText = formData.get("promptText");
+        const promptDept = formData.get("promptDept");
+        const promptType = formData.get("promptType");
+        const formattedPromptText = `{"prompt":"${promptText}}`;
+        const formattedSourceLink = `${sourceLink}`;
+
+        console.log(formattedSourceLink);
+
+        try {
+          const roleIds = [role];
+          console.log(roleIds);
+          const arrayCatg = promptCatg.split(", ");
+          const deptIds = [promptDept];
+
+          const response = await fetch(`${airtableApiUrl}`, {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              records: [
+                {
+                  fields: {
+                    "Prompt Departments": ["recDcw7umqLC4uT7f"],
+                    // "Prompt Ratings": ["reccgfs7FsYjNvNjP"],
+                    "Prompt Roles": ["HR Manager"],
+                    "Prompt Category": arrayCatg,
+                    "Prompt Title": promptTitle,
+                    "Prompt Link": formattedSourceLink,
+                    "Prompt Text": formattedPromptText,
+                    // "Prompt Type": promptType,
+                    // "Record ID": deptIds,
+                  },
+                },
+              ],
+            }),
+            method: "POST",
+          });
+          const data = await response.json();
+
+          console.log(data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(event.target);
+
+          addNewEntry(formData);
+        });
+    </script>
+  </head>
+  <body>
+    <main class="mainForm">
+      <div class="formDetails">
+        <h2>AI For Work: Prompts</h2>
+        <h4>Fill out this form to add a Prompt</h4>
+        <form class="promptForm" id="myForm">
+          <div class="eachInput">
+            <label for="promptType">Prompt Type *</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  id="promptType"
+                  name="promptType"
+                  placeholder="Select Prompt"
+                  required
+                />
+                <svg
+                  class="arrowDown arrowDownType"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsType">
+                <ul></ul>
+              </div>
+            </span>
+          </div>
+
+          <div class="eachInput">
+            <label for="promptCatg">Prompt Category</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  id="promptCatg"
+                  placeholder="Select Prompt Category"
+                  required
+                  name="promptCatg"
+                />
+                <svg
+                  class="arrowDown arrowDownCatg"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsCatg">
+                <ul></ul>
+              </div>
+            </span>
+          </div>
+
+          <div class="eachInput">
+            <label for="promptText">Prompt Text</label>
+            <span>
+              <div class="inputDiv">
+                <textarea
+                  name="promptText"
+                  id=""
+                  cols="30"
+                  rows="6"
+                  id="promptText"
+                  required
+                  placeholder="Paste Prompts here"
+                ></textarea>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="promptTitle">Prompt Title *</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptTitle"
+                  id="promptTitle"
+                  placeholder="Your Prompt Title Goes Here"
+                  required
+                />
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="sourceLink"> Source Link</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="url"
+                  id="sourceLink"
+                  name="sourceLink"
+                  placeholder="Copy link to original prompt here"
+                  pattern="https?://(www\.)?.*"
+                  required
+                />
+                <div class="errorMssg">
+                  <svg
+                    id="errorIcon"
+                    fill="#de350b"
+                    height="15px"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        d="M12.884 2.532c-.346-.654-1.422-.654-1.768 0l-9 17A.999.999 0 0 0 3 21h18a.998.998 0 0 0 .883-1.467L12.884 2.532zM13 18h-2v-2h2v2zm-2-4V9h2l.001 5H11z"
+                      ></path>
+                    </g>
+                  </svg>
+                  <p class="error-message">Please enter a valid URL.</p>
+                </div>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="industry">Industry</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptIndustry"
+                  id="promptIndustry"
+                  placeholder="Select Industry"
+                  required
+                />
+                <svg
+                  class="arrowDown arrowDownIndustry"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsIndustry">
+                <ul></ul>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="department">Department</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptDept"
+                  id="promptDept"
+                  placeholder="Select Department"
+                  required
+                />
+                <svg
+                  class="arrowDown arrowDownDept"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsDept">
+                <ul></ul>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="role">Role *</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptRole"
+                  id="promptRole"
+                  placeholder="Select Role"
+                  required
+                />
+                <svg
+                  class="arrowDown arrowDownRole"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsRole">
+                <ul></ul>
+              </div>
+            </span>
+          </div>
+          <input type="submit" class="submit" />
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

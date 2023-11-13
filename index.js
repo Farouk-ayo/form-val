@@ -283,7 +283,7 @@ const serviceCategories = [
   },
 ];
 
-const promptTypeOptions = ["free", "Membership", "Paid"];
+const promptTypeOptions = ["Free", "Membership", "Paid"];
 const suggestionsTypeLists = document.querySelector(".suggestionsType ul");
 suggestionsTypeLists.innerHTML = "";
 promptTypeOptions.forEach((option) => {
@@ -541,59 +541,63 @@ const apiKey =
 const baseId = "app7VXdu27jaUQjIV";
 const tableId = "tblWxjOgN18FFMQ6k";
 const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
-// const populateDropdown = async () => {
-//   try {
-//     const response = await fetch(`${airtableApiUrl}`, {
-//       headers: {
-//         accept: "application/json",
-//         Authorization: `Bearer ${apiKey}`,
-//       },
-//       method: "GET",
-//     });
-//     const data = await response.json();
 
-//     console.log(data.records);
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// };
-// populateDropdown();
-
-function addNewEntry(formData) {
-  const role = formData.get("role");
+const addNewEntry = async (formData) => {
+  const role = formData.get("promptRole");
   const sourceLink = formData.get("sourceLink");
   const promptCatg = formData.get("promptCatg");
   const promptTitle = formData.get("promptTitle");
   const promptText = formData.get("promptText");
-  const arrayCatg = promptCatg.split(", ");
+  const promptDept = formData.get("promptDept");
+  const promptType = formData.get("promptType");
+  const formattedPromptText = `{"prompt":"${promptText}}`;
+  const formattedSourceLink = `${sourceLink}`;
 
-  fetch(`${airtableApiUrl}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      fields: {
-        "Prompt Category": arrayCatg,
-        "Prompt Text": promptText,
-        "Prompt Title": promptTitle,
-        "Prompt Link": sourceLink,
+  console.log(formattedSourceLink);
 
-        Role: [role],
+  try {
+    const roleIds = [role];
+    console.log(roleIds);
+    const arrayCatg = promptCatg.split(", ");
+    const deptIds = [promptDept];
+
+    const response = await fetch(`${airtableApiUrl}`, {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
       },
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => console.error("Error:", error));
-}
+      body: JSON.stringify({
+        records: [
+          {
+            fields: {
+              "Prompt Departments": ["recDcw7umqLC4uT7f"],
+              // "Prompt Ratings": ["reccgfs7FsYjNvNjP"],
+              "Prompt Roles": ["HR Manager"],
+              "Prompt Category": arrayCatg,
+              "Prompt Title": promptTitle,
+              "Prompt Link": formattedSourceLink,
+              "Prompt Text": formattedPromptText,
+              // "Prompt Type": promptType,
+              // "Record ID": deptIds,
+            },
+          },
+        ],
+      }),
+      method: "POST",
+    });
+    const data = await response.json();
+
+    console.log(data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 document.getElementById("myForm").addEventListener("submit", function (event) {
   event.preventDefault();
 
   const formData = new FormData(event.target);
+
   addNewEntry(formData);
 });
