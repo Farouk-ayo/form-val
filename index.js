@@ -1,370 +1,112 @@
-const serviceCategories = [
-  {
-    dept: "Administrative",
-    roles: [
-      "Administrative Assistant",
-      "Data Entry Clerk",
-      "Executive Assistant",
-      "Office Manager",
-      "Receptionist",
-    ],
-  },
+const apiKey =
+  "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
+const baseId = "app7VXdu27jaUQjIV";
+const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/`;
 
-  {
-    dept: "Creative",
-    roles: [
-      "Art Director",
-      "Video Editor",
-      "Web Designer",
-      "Graphic Designer",
-      "UX Designer",
-      "Illustrator",
-      "Animator",
-    ],
-  },
+let dropdownItems = {};
 
-  {
-    dept: "Customer Service",
-    roles: [
-      "Technical Support Specialist",
-      "Customer Service Team Lead",
-      "Customer Service Rep",
-      "Call Center Agent",
-    ],
-  },
+const populateDropdown = async (tableId, htmlTag, fieldName, items) => {
+  const suggestionsElement = document.querySelector(`.${htmlTag}`);
+  suggestionsElement.innerHTML = "<li>Loading...</li>";
 
-  {
-    dept: "Customer Success",
-    roles: [
-      "Account Manager",
-      "Onboarding Specialist",
-      "Customer Success Manager",
-      "Customer Success Coordinator",
-      "Customer Success Analyst",
-    ],
-  },
+  const response = await fetch(`${airtableApiUrl}${tableId}`, {
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    method: "GET",
+  });
 
-  {
-    dept: "Education",
-    roles: ["Teacher", "Curriculum Developer", "Professor", "Tutor"],
-  },
+  if (!response.ok) {
+    const errorMessage = `Error: ${response.status} - ${response.statusText}`;
+    console.error(errorMessage);
+    suggestionsElement.innerHTML = `<li>${errorMessage}</li>`;
+    return null;
+  }
 
-  {
-    dept: "Engineering",
-    roles: [
-      "Software Engineer",
-      "Civil Engineer",
-      "Mechanical Engineer",
-      "Electrical Engineer",
-    ],
-  },
+  const data = await response.json();
 
-  {
-    dept: "Entrepreneur",
-    roles: [
-      "Startup Advisor",
-      "Founder",
-      "Chief Marketing Officer (CMO)",
-      "Chief Technology Officer (CTO)",
-      "Chief Operating Officer (COO)",
-      "Chief Strategy Officer (CSO)",
-      "Chief Executive Officer (CEO)",
-      "Chief Human Resources Officer (CHRO)",
-      "Chief Financial Officer (CFO)",
-      "Chief Information Security Officer (CISO)",
-    ],
-  },
+  dropdownItems[fieldName] =
+    items || data.records.map((record) => record.fields);
 
-  {
-    dept: "Executive Management",
-    roles: [
-      "Chief Information Security Officer (CISO)",
-      "Chief Executive Officer (CEO)",
-      "Chief Human Resources Officer (CHRO)",
-      "Chief Operating Officer (COO)",
-      "Chief Financial Officer (CFO)",
-      "Chief Marketing Officer (CMO)",
-      "Chief Technology Officer (CTO)",
-      "Chief Strategy Officer (CSO)",
-    ],
-  },
-  {
-    dept: "Finance",
-    roles: [
-      "Accountant",
-      "Accounts Receivable Specialist",
-      "Accounts Payable Specialist",
-      "Financial Planner",
-      "Financial Analyst",
-      "Chief Financial Officer (CFO)",
-    ],
-  },
+  suggestionsElement.innerHTML = "";
 
-  {
-    dept: "Human Resources",
-    roles: [
-      "Recruiter",
-      "Employee Relations Specialist",
-      "HRIS Specialist",
-      "Compensation And Benefits Specialist",
-      "Training And Development Specialist",
-      "HR Analyst",
-      "HR Manager",
-      "Chief Human Resources Officer (CHRO)",
-    ],
-  },
+  dropdownItems[fieldName].forEach((item) => {
+    const li = document.createElement("li");
+    if (fieldName === "promptType") {
+      li.textContent = item["Prompt Type Names"];
+    } else if (fieldName === "promptIndustry") {
+      li.textContent = item["Industry Name"];
+    } else if (fieldName === "promptCatg") {
+      li.textContent = item["Name"];
+    } else {
+      li.textContent = item[fieldName];
+    }
+    suggestionsElement.appendChild(li);
+  });
 
-  {
-    dept: "Information Technology",
-    roles: [],
-  },
+  return dropdownItems[fieldName];
+};
 
-  {
-    dept: "Legal",
-    roles: [
-      "Securities Lawyer",
-      "Personal Injury Lawyer",
-      "Family Lawyer",
-      "Criminal Defense Lawyer",
-      "Real Estate Lawyer",
-      "Trust And Estates Lawyer",
-      "Civil Rights Lawyer",
-      "Bankruptcy Lawyer",
-      "Immigration Lawyer",
-      "Paralegal",
-      "Intellectual Property Lawyer",
-      "Employment Lawyer",
-      "Tax Lawyer",
-      "Corporate Lawyer",
-    ],
-  },
+let promptRoleOptions;
 
-  {
-    dept: "Marketing",
-    roles: [
-      "Marketing Analyst",
-      "Event Marketing Specialist",
-      "E-Commerce Manager",
-      "SEO Specialist",
-      "Social Media Manager",
-      "PPC Specialist",
-      "Digital Marketing Specialist",
-      "Amazon FBA Ecommerce Manager",
-      "Influencer Marketing Specialist",
-      "Lead Generation Specialist",
-      "B2B Marketing Specialist",
-      "Paid Social Media Specialist",
-      "B2B Content Marketing Manager",
-      "Account-Based Marketing Manager",
-      "Product Marketing Manager",
-      "Creative Strategist",
-      "Brand Manager",
-      "Marketing Manager",
-      "Email Marketing Specialist",
-      "Content Marketing Specialist",
-      "Marketing Coordinator",
-      "Market Research Analyst",
-      "Copywriter",
-      "Marketing Operations",
-      "Content Creator",
-      "Chief Marketing Officer (CMO)",
-    ],
-  },
+async function updateSuggestions(departments) {
+  const existingPromptRoleOptions = dropdownItems["Role Name"];
+  await populateDropdown(
+    "tblNOSfTqt31iJZY8",
+    "suggestionsRole ul",
+    "Role Name"
+  );
 
-  {
-    dept: "Media And Communication",
-    roles: ["Content Writer", "Journalist", "Public Relations Specialist"],
-  },
+  const promptRoleOptions = dropdownItems["Role Name"].filter((role) => {
+    const roleDepartments = role["Departments"];
+    if (roleDepartments) {
+      return roleDepartments.some((dept) => departments.includes(dept));
+    } else {
+      return false;
+    }
+  });
 
-  {
-    dept: "Medical",
-    roles: [
-      "Registered Nurse",
-      "Obstetrician-Gynecologist (OB-GYN)",
-      "Family Doctor",
-      "Pediatrician",
-      "Counseling Psychologist",
-      "Physical Therapist",
-      "Pharmacist",
-      "Physician",
-      "Dentist",
-      "Chiropractor",
-      "Psychiatrist",
-      "Neurosurgeon",
-      "Medical Technologist",
-      "Clinical Psychologist",
-      "Speech-Language Pathologist",
-      "Occupational Therapist",
-      "Psychologist",
-      "Dietitian",
-    ],
-  },
+  const filteredPromptRoleOptions = await populateDropdown(
+    "tblNOSfTqt31iJZY8",
+    "suggestionsRole ul",
+    "Role Name",
+    promptRoleOptions
+  );
 
-  {
-    dept: "Personal Development",
-    roles: [
-      "Mindfulness Or Meditation Coach",
-      "Art Or Creativity Coach",
-      "Relationship Coach",
-      "Financial Coach",
-      "Career Coach",
-      "Image Consultant Or Personal Stylist",
-      "Executive Coach",
-      "Sports Coach",
-      "Fitness Trainer",
-      "Parenting Coach",
-      "Professional Organizer",
-      "Life Coach",
-      "Nutritionist",
-      "Health Coach",
-      "Strategic Thinking",
-    ],
-  },
+  const updatedPromptRoleOptions = existingPromptRoleOptions.concat(
+    filteredPromptRoleOptions
+  );
 
-  {
-    dept: "Public Relations",
-    roles: [
-      "PR Specialist",
-      "Crisis Communications Manager",
-      "Social Media Strategist",
-      "PR Manager",
-    ],
-  },
+  if (updatedPromptRoleOptions.length > 0) {
+    const roleRecord = updatedPromptRoleOptions.map((role) => {
+      dropdownItems["Role Name"] = roleRecord;
 
-  {
-    dept: "Real Estate",
-    roles: [
-      "Leasing Agent",
-      "Real Estate Analyst",
-      "Mortgage Loan Officer",
-      "Real Estate Developer",
-      "Property Manager",
-      "Real Estate Broker",
-      "Real Estate Investor",
-      "Mortgage Broker",
-      "Real Estate Appraiser",
-      "Real Estate Agent",
-    ],
-  },
-
-  {
-    dept: "Religious Services",
-    roles: ["Priest", "Religious Educator", "Youth Minister", "Imam", "Rabbi"],
-  },
-
-  {
-    dept: "Retail",
-    roles: [
-      "Assistant Store Manager",
-      "Retail Buyer",
-      "Store Operations Manager",
-      "Store Manager",
-      "Department Manager",
-      "District Or Regional Manager",
-      "Inventory Specialist",
-      "Visual Merchandiser",
-      "Sales Associate",
-    ],
-  },
-
-  {
-    dept: "Sales",
-    roles: [
-      "Sales Engineer",
-      "Sales Manager",
-      "Inside Sales Representative",
-      "Outside Sales Representative",
-      "Business Development Manager",
-      "Sales Development Representative",
-      "Account Executive",
-      "Sales Analyst",
-      "Sales Operations",
-    ],
-  },
-];
-
-const promptTypeOptions = ["Free", "Membership", "Paid"];
-const suggestionsTypeLists = document.querySelector(".suggestionsType ul");
-suggestionsTypeLists.innerHTML = "";
-promptTypeOptions.forEach((option) => {
-  const li = document.createElement("li");
-  li.textContent = option;
-  suggestionsTypeLists.appendChild(li);
-});
-
-const promptCatgOptions = ["Marketing", "Options", "Strategy"];
-const suggestionsCatgLists = document.querySelector(".suggestionsCatg ul");
-suggestionsCatgLists.innerHTML = "";
-promptCatgOptions.forEach((option) => {
-  const li = document.createElement("li");
-  li.textContent = option;
-  suggestionsCatgLists.appendChild(li);
-});
-
-const promptIndustryOptions = ["Education", "Entertainment", "Hospitality"];
-const suggestionIndustryLists = document.querySelector(
-  ".suggestionsIndustry ul"
-);
-suggestionIndustryLists.innerHTML = "";
-promptIndustryOptions.forEach((option) => {
-  const li = document.createElement("li");
-  li.textContent = option;
-  suggestionIndustryLists.appendChild(li);
-});
-
-const promptDeptOptions = [
-  "Administrative",
-  "Creative",
-  "Customer Service",
-  "Customer Success",
-  "Education",
-  "Engineering",
-  "Entrepreneur",
-  "Executive Management",
-  "Finance",
-  "Human Resources",
-  "Information Technology",
-  "Legal",
-  "Marketing",
-  "Media And Communications",
-  "Medical",
-  "Personal Development",
-  "Public Relations",
-  "Real Estate",
-  "Religious Services",
-  "Retail",
-  "Sales",
-];
-const suggestionsDeptLists = document.querySelector(".suggestionsDept ul");
-suggestionsDeptLists.innerHTML = "";
-promptDeptOptions.forEach((option) => {
-  const li = document.createElement("li");
-  li.textContent = option;
-  suggestionsDeptLists.appendChild(li);
-});
-
-function updateSuggestions(department) {
-  const suggestionsRoleLists = document.querySelector(`.suggestionsRole ul`);
-  const promptRoleOptions =
-    serviceCategories.find((category) => category.dept === department)?.roles ||
-    [];
-  suggestionsRoleLists.innerHTML = "";
-  if (promptRoleOptions.length > 0) {
-    promptRoleOptions.forEach((role) => {
-      const li = document.createElement("li");
-      li.textContent = role;
-      suggestionsRoleLists.appendChild(li);
+      return role;
     });
   }
 }
+
+async function updateSuggestionsSingle() {
+  dropdownItems["promptType"];
+  dropdownItems["promptIndustry"];
+  dropdownItems["promptCatg"];
+  populateDropdown("tbldLUtMAk0sfvwIF", "suggestionsType ul", "promptType");
+  populateDropdown(
+    "tblcQPjP9SPEEXmph",
+    "suggestionsIndustry ul",
+    "promptIndustry"
+  );
+  populateDropdown("tblFJNzh7J8Bv2Uip", "suggestionsCatg ul", "promptCatg");
+}
+
 function setupInput(inputElement, suggestionsElement, arrowElement) {
   function toggleArrowAndSuggestions(eventTargetValue) {
-    if (promptDeptOptions.includes(eventTargetValue)) {
-      updateSuggestions(eventTargetValue);
-    }
+    updateSuggestionsSingle();
     arrowElement.classList.toggle("rotated");
     suggestionsElement.classList.toggle("show");
   }
+
   arrowElement.addEventListener("click", toggleArrowAndSuggestions);
   inputElement.addEventListener("click", toggleArrowAndSuggestions);
 
@@ -372,7 +114,6 @@ function setupInput(inputElement, suggestionsElement, arrowElement) {
   suggestionsElement.addEventListener("click", function (event) {
     if (event.target.tagName === "LI") {
       // Set the input value to the clicked li's text content
-
       inputElement.value = event.target.textContent;
       toggleArrowAndSuggestions(event.target.textContent);
       suggestionsElement.classList.remove("show");
@@ -421,13 +162,60 @@ function setupInput(inputElement, suggestionsElement, arrowElement) {
   });
 }
 
+let selectedDepartments = [];
+let selectedRoles = [];
 // Multiselect input
 function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
+  populateDropdown("tbl1L1BhG3RIFZPl9", "suggestionsDept ul", "Department");
+  populateDropdown("tblNOSfTqt31iJZY8", "suggestionsRole ul", "Role Name");
+
   const selectedSuggestions = [];
+  const allowedSelectors = [
+    ".suggestionsDept ul",
+    ".suggestionsCatg ul",
+    ".suggestionsRole ul",
+  ];
 
   function toggleArrowAndSuggestions(eventTargetValue) {
     arrowElement.classList.toggle("rotated");
-    suggestionsElement.classList.toggle("show");
+    if (
+      !allowedSelectors.some((selector) => {
+        return event.target.closest(selector);
+      })
+    ) {
+      suggestionsElement.classList.toggle("show");
+    }
+
+    const matchingDepartments =
+      dropdownItems["Department"] &&
+      dropdownItems["Department"].filter((obj) =>
+        eventTargetValue.includes(obj.Department)
+      );
+    if (matchingDepartments.length > 0) {
+      selectedDepartments = matchingDepartments;
+      dropdownItems["SelectedDept"] = selectedDepartments;
+      updateSuggestions(dropdownItems["SelectedDept"]);
+    }
+
+    const matchingRole =
+      dropdownItems["Role Name"] &&
+      dropdownItems["Role Name"].filter((obj) =>
+        eventTargetValue.includes(obj["Role Name"])
+      );
+
+    if (matchingRole.length > 0) {
+      selectedRoles = matchingRole;
+      dropdownItems["SelectedRole"] = selectedRoles;
+      updateSuggestions(dropdownItems["SelectedRole"]);
+    }
+
+    if (matchingDepartments.length > 0) {
+      const departmentRecordIds = matchingDepartments.map(
+        (dept) => dept["Record ID"]
+      );
+      dropdownItems["Record IDs"] = departmentRecordIds;
+      updateSuggestions(dropdownItems["Record IDs"]);
+    }
   }
 
   arrowElement.addEventListener("click", toggleArrowAndSuggestions);
@@ -438,7 +226,6 @@ function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
     if (event.target.tagName === "LI") {
       const clickedSuggestion = event.target.textContent;
 
-      // Toggle the suggestion's selection state
       const index = selectedSuggestions.indexOf(clickedSuggestion);
       if (index === -1) {
         selectedSuggestions.push(clickedSuggestion);
@@ -447,7 +234,7 @@ function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
         selectedSuggestions.splice(index, 1);
         event.target.classList.remove("selected");
       }
-
+      toggleArrowAndSuggestions(selectedSuggestions, event);
       updateInputValue();
     }
   });
@@ -491,35 +278,50 @@ const promptType = document.getElementById("promptType");
 const suggestionsType = document.querySelector(".suggestionsType");
 const arrowType = document.querySelector(".arrowDownType");
 
-setupInput(promptType, suggestionsType, arrowType);
+promptType.addEventListener(
+  "focus",
+  setupInput(promptType, suggestionsType, arrowType)
+);
 
 // Setup for the second input
 const promptCatg = document.getElementById("promptCatg");
 const suggestionsCatg = document.querySelector(".suggestionsCatg");
 const arrowCatg = document.querySelector(".arrowDownCatg");
 
-setupMultiSelectInput(promptCatg, suggestionsCatg, arrowCatg);
+promptCatg.addEventListener(
+  "focus",
+  setupInput(promptCatg, suggestionsCatg, arrowCatg)
+);
 
 // Setup for the third input
 const promptIndustry = document.getElementById("promptIndustry");
 const suggestionsIndustry = document.querySelector(".suggestionsIndustry");
 const arrowIndustry = document.querySelector(".arrowDownIndustry");
 
-setupInput(promptIndustry, suggestionsIndustry, arrowIndustry);
+promptIndustry.addEventListener(
+  "focus",
+  setupInput(promptIndustry, suggestionsIndustry, arrowIndustry)
+);
 
 // Setup for the fourth input
 const promptDept = document.getElementById("promptDept");
 const suggestionsDept = document.querySelector(".suggestionsDept");
 const arrowDept = document.querySelector(".arrowDownDept");
 
-setupInput(promptDept, suggestionsDept, arrowDept);
+promptDept.addEventListener(
+  "focus",
+  setupMultiSelectInput(promptDept, suggestionsDept, arrowDept)
+);
 
 // Setup for the fifth input
 const promptRole = document.getElementById("promptRole");
 const suggestionsRole = document.querySelector(".suggestionsRole");
 const arrowRole = document.querySelector(".arrowDownRole");
 
-setupInput(promptRole, suggestionsRole, arrowRole);
+promptRole.addEventListener(
+  "focus",
+  setupMultiSelectInput(promptRole, suggestionsRole, arrowRole)
+);
 
 document.addEventListener("DOMContentLoaded", function () {
   const sourceLinkInput = document.getElementById("sourceLink");
@@ -536,14 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
   sourceLinkInput.addEventListener("input", validateInput);
 });
 
-const apiKey =
-  "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
-const baseId = "app7VXdu27jaUQjIV";
-const tableId = "tblWxjOgN18FFMQ6k";
-const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
-
 const addNewEntry = async (formData) => {
-  const role = formData.get("promptRole");
   const sourceLink = formData.get("sourceLink");
   const promptCatg = formData.get("promptCatg");
   const promptTitle = formData.get("promptTitle");
@@ -553,15 +348,29 @@ const addNewEntry = async (formData) => {
   const formattedPromptText = `{"prompt":"${promptText}}`;
   const formattedSourceLink = `${sourceLink}`;
 
-  console.log(formattedSourceLink);
+  console.log(dropdownItems);
+  const selectedDeptRecordIds =
+    dropdownItems["SelectedDept"]?.map((obj) => obj["Record ID"]) || [];
+  console.log(selectedDeptRecordIds);
+  const selectedRoleRecordIds = dropdownItems["SelectedRole"]?.map(
+    (obj) => obj["Record ID"] || []
+  );
+
+  // Departments
+  // :
+  // ['rec5mjKBNwh5R3hZy']
+  // Prompts (from Departments)
+  // :
+  // ['reckkGnNuCPDut0qG']
+
+  console.log(selectedRoleRecordIds);
 
   try {
-    const roleIds = [role];
-    console.log(roleIds);
-    const arrayCatg = promptCatg.split(", ");
+    // const arrayCatg = promptCatg.split(", ");
     const deptIds = [promptDept];
+    const tableId = "tblWxjOgN18FFMQ6k";
 
-    const response = await fetch(`${airtableApiUrl}`, {
+    const response = await fetch(`${airtableApiUrl}${tableId}`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${apiKey}`,
@@ -571,10 +380,9 @@ const addNewEntry = async (formData) => {
         records: [
           {
             fields: {
-              "Prompt Departments": ["recDcw7umqLC4uT7f"],
-              // "Prompt Ratings": ["reccgfs7FsYjNvNjP"],
-              "Prompt Roles": ["HR Manager"],
-              "Prompt Category": arrayCatg,
+              "Prompt Departments": selectedDeptRecordIds,
+              "Prompt Roles": selectedRoleRecordIds,
+              // "Prompt Category": promptCatg,
               "Prompt Title": promptTitle,
               "Prompt Link": formattedSourceLink,
               "Prompt Text": formattedPromptText,
