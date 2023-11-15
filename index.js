@@ -100,11 +100,14 @@ async function updateSuggestionsSingle() {
   populateDropdown("tblFJNzh7J8Bv2Uip", "suggestionsCatg ul", "promptCatg");
 }
 
+let selectedPromptType = [];
+let selectedCatg = [];
 function setupInput(inputElement, suggestionsElement, arrowElement) {
   function toggleArrowAndSuggestions(eventTargetValue) {
     updateSuggestionsSingle();
     arrowElement.classList.toggle("rotated");
     suggestionsElement.classList.toggle("show");
+    console.log(eventTargetValue);
   }
 
   arrowElement.addEventListener("click", toggleArrowAndSuggestions);
@@ -112,12 +115,39 @@ function setupInput(inputElement, suggestionsElement, arrowElement) {
 
   // Add click event listener to each li in the suggestions list
   suggestionsElement.addEventListener("click", function (event) {
-    if (event.target.tagName === "LI") {
+    if (
+      event.target.tagName === "LI" &&
+      event.target.textContent !== "Loading..."
+    ) {
       // Set the input value to the clicked li's text content
       inputElement.value = event.target.textContent;
       toggleArrowAndSuggestions(event.target.textContent);
       suggestionsElement.classList.remove("show");
       arrowElement.classList.remove("rotated");
+
+      const matchingPromptType =
+        dropdownItems["promptType"] &&
+        dropdownItems["promptType"].filter((obj) => {
+          return event.target.textContent.includes(obj["Prompt Type Names"]);
+        });
+
+      console.log(matchingPromptType);
+      if (matchingPromptType.length > 0) {
+        selectedPromptType = matchingPromptType;
+        dropdownItems["SelectedPromptType"] = selectedPromptType;
+        updateSuggestions(dropdownItems["SelectedPromptType"]);
+      }
+
+      const matchingCatg =
+        dropdownItems["promptCatg"] &&
+        dropdownItems["promptCatg"].filter((obj) => {
+          return event.target.textContent.includes(obj.Name);
+        });
+      if (matchingCatg.length > 0) {
+        selectedCatg = matchingCatg;
+        dropdownItems["SelectedCatg"] = selectedCatg;
+        updateSuggestions(dropdownItems["SelectedCatg"]);
+      }
     }
   });
   // Add input event listener to filter suggestions while typing
@@ -202,12 +232,8 @@ function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
       dropdownItems["Role Name"].filter((obj) =>
         eventTargetValue.includes(obj["Role Name"])
       );
-
-    if (matchingRole.length > 0) {
-      selectedRoles = matchingRole;
-      dropdownItems["SelectedRole"] = selectedRoles;
-      updateSuggestions(dropdownItems["SelectedRole"]);
-    }
+    selectedRoles = matchingRole;
+    dropdownItems["SelectedRole"] = selectedRoles;
 
     if (matchingDepartments.length > 0) {
       const departmentRecordIds = matchingDepartments.map(
@@ -223,7 +249,12 @@ function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
 
   // Add click event listener to each li in the suggestions list
   suggestionsElement.addEventListener("click", function (event) {
-    if (event.target.tagName === "LI") {
+    event.preventDefault();
+    event.stopPropagation();
+    if (
+      event.target.tagName === "LI" &&
+      event.target.textContent !== "Loading..."
+    ) {
       const clickedSuggestion = event.target.textContent;
 
       const index = selectedSuggestions.indexOf(clickedSuggestion);
@@ -234,7 +265,7 @@ function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
         selectedSuggestions.splice(index, 1);
         event.target.classList.remove("selected");
       }
-      toggleArrowAndSuggestions(selectedSuggestions, event);
+      toggleArrowAndSuggestions(selectedSuggestions);
       updateInputValue();
     }
   });
@@ -340,11 +371,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const addNewEntry = async (formData) => {
   const sourceLink = formData.get("sourceLink");
-  const promptCatg = formData.get("promptCatg");
+  const promptCatg = [formData.get("promptCatg")];
+
   const promptTitle = formData.get("promptTitle");
   const promptText = formData.get("promptText");
-  const promptDept = formData.get("promptDept");
   const promptType = formData.get("promptType");
+  console.log(promptType);
   const formattedPromptText = `{"prompt":"${promptText}}`;
   const formattedSourceLink = `${sourceLink}`;
 
@@ -355,19 +387,16 @@ const addNewEntry = async (formData) => {
   const selectedRoleRecordIds = dropdownItems["SelectedRole"]?.map(
     (obj) => obj["Record ID"] || []
   );
-
-  // Departments
-  // :
-  // ['rec5mjKBNwh5R3hZy']
-  // Prompts (from Departments)
-  // :
-  // ['reckkGnNuCPDut0qG']
+  const selectedCatgIds = dropdownItems["SelectedCatg"]?.map(
+    (obj) => obj["Record ID"] || []
+  );
+  const selectedPromptType = dropdownItems["SelectedPromptType"]?.map(
+    (obj) => obj["Record ID"] || []
+  );
 
   console.log(selectedRoleRecordIds);
 
   try {
-    // const arrayCatg = promptCatg.split(", ");
-    const deptIds = [promptDept];
     const tableId = "tblWxjOgN18FFMQ6k";
 
     const response = await fetch(`${airtableApiUrl}${tableId}`, {
@@ -382,12 +411,11 @@ const addNewEntry = async (formData) => {
             fields: {
               "Prompt Departments": selectedDeptRecordIds,
               "Prompt Roles": selectedRoleRecordIds,
-              // "Prompt Category": promptCatg,
+              "Prompt Category": selectedCatgIds,
               "Prompt Title": promptTitle,
               "Prompt Link": formattedSourceLink,
               "Prompt Text": formattedPromptText,
-              // "Prompt Type": promptType,
-              // "Record ID": deptIds,
+              "Prompt Type": selectedPromptType,
             },
           },
         ],
