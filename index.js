@@ -1,3 +1,17 @@
+document
+  .getElementById("sourceLink")
+  .addEventListener("input", function (event) {
+    let currentValue = event.target.value;
+
+    if (currentValue.startsWith("https://")) {
+      currentValue = currentValue.replace(/^http:\/\//, "https://");
+    } else if (currentValue.startsWith("www.")) {
+      currentValue = "http://" + currentValue;
+    }
+
+    event.target.value = currentValue;
+  });
+
 const apiKey =
   "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
 const baseId = "app7VXdu27jaUQjIV";
