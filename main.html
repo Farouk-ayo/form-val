@@ -9,254 +9,280 @@
       href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Numans&display=swap"
       rel="stylesheet"
     />
-
     <style>
       * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: "Numans", sans-serif;
-}
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Numans", sans-serif;
+      }
 
-@media only screen and (max-width: 49rem) {
-  html {
-    font-size: 80%;
-  }
-}
+      @media only screen and (max-width: 49rem) {
+        html {
+          font-size: 80%;
+        }
+      }
 
-.mainForm {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: url("https://softr-prod.imgix.net/applications/adda05be-0ce0-40ae-9d74-683f93a84196/assets/928a7cce-8c7d-4b40-830d-cfe9ce98c891.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 5rem 0rem;
-  width: 100%;
-}
+      .mainForm {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url("https://softr-prod.imgix.net/applications/adda05be-0ce0-40ae-9d74-683f93a84196/assets/928a7cce-8c7d-4b40-830d-cfe9ce98c891.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 5rem 0rem;
+        width: 100%;
+      }
 
-.formDetails {
-  background: white;
-  gap: 2rem;
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  border-radius: 1rem;
-  width: 55%;
-}
+      .formDetails {
+        background: white;
+        gap: 2rem;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        border-radius: 1rem;
+        width: 55%;
+      }
 
-@media only screen and (max-width: 79rem) {
-  .formDetails {
-    width: 70%;
-  }
-}
-@media only screen and (max-width: 57rem) {
-  .formDetails {
-    width: 80%;
-  }
-}
-@media only screen and (max-width: 49rem) {
-  .formDetails {
-    width: 90%;
-  }
-}
-@media only screen and (max-width: 39rem) {
-  .formDetails {
-    padding: 3rem 1rem;
-  }
-}
-.formDetails h2 {
-  color: #240240;
-  font-size: 1.5rem;
-  font-family: "Lato", sans-serif;
-}
-.formDetails h4 {
-  color: #270346;
-  font-size: 1rem;
-  font-weight: 100;
-}
-.promptForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  position: relative;
-}
+      @media only screen and (max-width: 79rem) {
+        .formDetails {
+          width: 70%;
+        }
+      }
+      @media only screen and (max-width: 57rem) {
+        .formDetails {
+          width: 80%;
+        }
+      }
+      @media only screen and (max-width: 49rem) {
+        .formDetails {
+          width: 90%;
+        }
+      }
+      @media only screen and (max-width: 39rem) {
+        .formDetails {
+          padding: 3rem 1rem;
+        }
+      }
 
-.eachInput {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: start;
-  width: 100%;
-  gap: 2rem;
-  position: relative;
-}
-.eachInput span {
-  width: 70%;
-  position: relative;
-}
-@media only screen and (max-width: 49rem) {
-  .eachInput span {
-    width: 65%;
-  }
-}
+      .formDetails h2 {
+        color: #240240;
+        font-size: 1.5rem;
+        font-family: "Lato", sans-serif;
+      }
+      .formDetails h4 {
+        color: #270346;
+        font-size: 1rem;
+        font-weight: 100;
+      }
+      .promptForm {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 100%;
+        position: relative;
+      }
 
-.eachInput label {
-  font-size: 1rem;
-  color: #616161;
-  font-weight: 600;
-  width: 30%;
-  font-size: 0.8rem;
-  padding: 1rem;
-}
+      .eachInput {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        gap: 2rem;
+        position: relative;
+      }
 
-@media only screen and (max-width: 49rem) {
-  .eachInput label {
-    padding: 0.5rem;
-    width: 35%;
-  }
-}
+      @media only screen and (max-width: 29rem) {
+        .eachInput {
+          gap: 1rem;
+        }
+      }
+      .eachInput span {
+        width: 70%;
+        position: relative;
+      }
+      @media only screen and (max-width: 49rem) {
+        .eachInput span {
+          width: 65%;
+        }
+      }
+      @media only screen and (max-width: 29rem) {
+        .eachInput span {
+          width: 70%;
+        }
+      }
+      .eachInput label {
+        font-size: 1rem;
+        color: #616161;
+        font-weight: 600;
+        width: 30%;
+        font-size: 0.8rem;
+        padding: 1rem;
+      }
 
-.inputDiv {
-  position: relative;
-  width: 100%;
-}
+      @media only screen and (max-width: 49rem) {
+        .eachInput label {
+          padding: 0.5rem;
+          width: 35%;
+        }
+      }
+      @media only screen and (max-width: 29rem) {
+        .eachInput label {
+          width: 30%;
+        }
+      }
 
-.inputDiv input {
-  width: 100%;
-  padding: 0.7rem 0.5rem;
-  font-size: 0.9rem;
-  outline: none;
-  border: 0.12rem solid #bab7b7;
-  border-radius: 0.5rem;
-}
+      .inputDiv {
+        position: relative;
+        width: 100%;
+      }
 
-.eachInput input::placeholder {
-  color: #bab7b7;
-  font-weight: 500;
-}
+      .inputDiv input {
+        width: 100%;
+        padding: 0.7rem 0.5rem;
+        font-size: 0.9rem;
+        outline: none;
+        border: 0.12rem solid #bab7b7;
+        border-radius: 0.5rem;
+      }
 
-.eachInput input:hover {
-  border: 0.12rem solid rgb(66, 66, 66);
-  transition: all 0.3s;
-}
+      @media only screen and (max-width: 29rem) {
+        .inputDiv input {
+          padding: 0.6rem;
+          font-size: 0.7rem;
+        }
+      }
 
-.inputDiv textarea {
-  width: 100%;
-  padding: 0.7rem 0.5rem;
-  font-size: 0.9rem;
-  outline: none;
-  border: 0.12rem solid #bab7b7;
-  border-radius: 0.5rem;
-  resize: none;
-}
+      .eachInput input::placeholder {
+        color: #bab7b7;
+        font-weight: 500;
+      }
 
-.eachInput textarea::placeholder {
-  color: #bab7b7;
-  font-weight: 500;
-}
+      .eachInput input:hover {
+        border: 0.12rem solid rgb(66, 66, 66);
+        transition: all 0.3s;
+      }
 
-.eachInput textarea:hover {
-  border: 0.12rem solid rgb(66, 66, 66);
-  transition: all 0.3s;
-}
+      .inputDiv textarea {
+        width: 100%;
+        padding: 0.7rem 0.5rem;
+        font-size: 0.9rem;
+        outline: none;
+        border: 0.12rem solid #bab7b7;
+        border-radius: 0.5rem;
+        resize: none;
+      }
+      @media only screen and (max-width: 49rem) {
+        .inputDiv textarea {
+          padding: 0.5rem;
+          font-size: 0.7rem;
+        }
+      }
+      .eachInput textarea::placeholder {
+        color: #bab7b7;
+        font-weight: 500;
+      }
 
-.submit {
-  color: white;
-  background-color: #7710d2;
-  border-radius: 0.5rem;
-  box-shadow: rgba(17, 17, 17, 0.04) 0px 2px 4px 0px,
-    rgba(33, 33, 33, 0.08) 0px 8px 32px 0px;
-  border: none;
-  padding: 0.7rem 0rem;
-  font-weight: 300;
-  font-size: 0.9rem;
-}
+      .eachInput textarea:hover {
+        border: 0.12rem solid rgb(66, 66, 66);
+        transition: all 0.3s;
+      }
 
-.arrowDown {
-  position: absolute;
-  top: 50%;
-  right: 14px;
-  transform: translateY(-50%);
-  cursor: pointer;
-  transition: transform 0.2s;
-  background-color: white;
-}
+      .submit {
+        color: white;
+        background-color: #7710d2;
+        border-radius: 0.5rem;
+        box-shadow: rgba(17, 17, 17, 0.04) 0px 2px 4px 0px,
+          rgba(33, 33, 33, 0.08) 0px 8px 32px 0px;
+        border: none;
+        padding: 0.7rem 0rem;
+        font-weight: 300;
+        font-size: 0.9rem;
+      }
 
-.rotated {
-  transform: translateY(-50%) rotate(180deg);
-}
+      .arrowDown {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        transition: transform 0.2s;
+        background-color: white;
+      }
 
-.suggestions {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  gap: 0.5rem;
-  background-color: white;
-  width: 100%;
-  z-index: 4;
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
-  display: none;
-  overflow-y: scroll;
-  max-height: 15rem;
-}
+      .rotated {
+        transform: translateY(-50%) rotate(180deg);
+      }
 
-.show {
-  display: block !important;
-}
+      .suggestions {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        gap: 0.5rem;
+        background-color: white;
+        width: 100%;
+        z-index: 4;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+        display: none;
+        overflow-y: scroll;
+        max-height: 15rem;
+      }
 
-.suggestions ul li {
-  list-style: none;
-  padding: 0.8rem;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
+      .show {
+        display: block !important;
+      }
 
-.inputDiv:focus-within .arrow-icon {
-  transform: rotate(180deg);
-}
-.suggestions li.hovered {
-  background-color: #e9e9e9;
-}
-.suggestions li {
-  transition: background-color 0.3s ease;
-}
+      .suggestions ul li {
+        list-style: none;
+        padding: 0.8rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
 
-.suggestions li.selected {
-  background-color: #e9e9e9;
-}
+      .inputDiv:focus-within .arrow-icon {
+        transform: rotate(180deg);
+      }
+      .suggestions li.hovered {
+        background-color: #e9e9e9;
+      }
+      .suggestions li {
+        transition: background-color 0.3s ease;
+      }
 
-.errorMssg {
-  /* margin-top: 0.5rem; */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  position: absolute;
-  bottom: -1.2rem;
-  display: none;
-}
-.error-message {
-  color: #de350b;
-  font-size: 0.7rem;
-}
+      .suggestions li.selected {
+        background-color: #e9e9e9;
+      }
 
-#sourceLink:focus:invalid {
-  border-color: #de350b;
-}
+      .errorMssg {
+        /* margin-top: 0.5rem; */
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+        position: absolute;
+        bottom: -1.2rem;
+        display: none;
+      }
+      .error-message {
+        color: #de350b;
+        font-size: 0.7rem;
+      }
 
-.selected {
-  background-color: #d4d2d2;
-}
+      #sourceLink:focus:invalid {
+        border-color: #de350b;
+      }
 
+      .selected {
+        background-color: #d4d2d2;
+      }
     </style>
   </head>
   <body>
@@ -539,6 +565,7 @@
         </form>
       </div>
     </main>
+
     <script>
       document
         .getElementById("sourceLink")
@@ -671,7 +698,6 @@
           updateSuggestionsSingle();
           arrowElement.classList.toggle("rotated");
           suggestionsElement.classList.toggle("show");
-          console.log(eventTargetValue);
         }
 
         arrowElement.addEventListener("click", toggleArrowAndSuggestions);
@@ -785,7 +811,7 @@
         ];
 
         function toggleArrowAndSuggestions(eventTargetValue) {
-          arrowElement.classList.toggle("rotated");
+          arrowElement.classList.add("rotated");
           if (
             !allowedSelectors.some((selector) => {
               return event.target.closest(selector);
