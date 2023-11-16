@@ -12,215 +12,251 @@
 
     <style>
       * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        font-family: "Numans", sans-serif;
-      }
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Numans", sans-serif;
+}
 
-      .mainForm {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: url("https://softr-prod.imgix.net/applications/adda05be-0ce0-40ae-9d74-683f93a84196/assets/928a7cce-8c7d-4b40-830d-cfe9ce98c891.png");
-        background-size: cover;
-        background-repeat: no-repeat;
-        padding: 5rem 0rem;
-      }
+@media only screen and (max-width: 49rem) {
+  html {
+    font-size: 80%;
+  }
+}
 
-      .formDetails {
-        background: white;
-        gap: 2rem;
-        padding: 3rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2rem;
-        border-radius: 1rem;
-        width: 55%;
-      }
+.mainForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: url("https://softr-prod.imgix.net/applications/adda05be-0ce0-40ae-9d74-683f93a84196/assets/928a7cce-8c7d-4b40-830d-cfe9ce98c891.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 5rem 0rem;
+  width: 100%;
+}
 
-      @media (max-width: 1270px) {
-        .formDetails {
-          width: 80%;
-        }
-      }
-      .formDetails h2 {
-        color: #240240;
-        font-size: 1.5rem;
-        font-family: "Lato", sans-serif;
-      }
-      .formDetails h4 {
-        color: #270346;
-        font-size: 1rem;
-        font-weight: 100;
-      }
-      .promptForm {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        width: 100%;
-        position: relative;
-      }
+.formDetails {
+  background: white;
+  gap: 2rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  border-radius: 1rem;
+  width: 55%;
+}
 
-      .eachInput {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: start;
-        width: 100%;
-        gap: 2rem;
-        position: relative;
-      }
-      .eachInput span {
-        width: 70%;
-        position: relative;
-      }
+@media only screen and (max-width: 79rem) {
+  .formDetails {
+    width: 70%;
+  }
+}
+@media only screen and (max-width: 57rem) {
+  .formDetails {
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 49rem) {
+  .formDetails {
+    width: 90%;
+  }
+}
+@media only screen and (max-width: 39rem) {
+  .formDetails {
+    padding: 3rem 1rem;
+  }
+}
+.formDetails h2 {
+  color: #240240;
+  font-size: 1.5rem;
+  font-family: "Lato", sans-serif;
+}
+.formDetails h4 {
+  color: #270346;
+  font-size: 1rem;
+  font-weight: 100;
+}
+.promptForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  position: relative;
+}
 
-      .eachInput label {
-        font-size: 1rem;
-        color: #616161;
-        font-weight: 600;
-        width: 30%;
-        font-size: 0.8rem;
-        padding: 1rem;
-      }
+.eachInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  width: 100%;
+  gap: 2rem;
+  position: relative;
+}
+.eachInput span {
+  width: 70%;
+  position: relative;
+}
+@media only screen and (max-width: 49rem) {
+  .eachInput span {
+    width: 65%;
+  }
+}
 
-      .inputDiv {
-        position: relative;
-        width: 100%;
-      }
+.eachInput label {
+  font-size: 1rem;
+  color: #616161;
+  font-weight: 600;
+  width: 30%;
+  font-size: 0.8rem;
+  padding: 1rem;
+}
 
-      .inputDiv input {
-        width: 100%;
-        padding: 0.7rem 0.5rem;
-        font-size: 0.9rem;
-        outline: none;
-        border: 0.12rem solid #bab7b7;
-        border-radius: 0.5rem;
-      }
+@media only screen and (max-width: 49rem) {
+  .eachInput label {
+    padding: 0.5rem;
+    width: 35%;
+  }
+}
 
-      .eachInput input::placeholder {
-        color: #bab7b7;
-        font-weight: 500;
-      }
+.inputDiv {
+  position: relative;
+  width: 100%;
+}
 
-      .eachInput input:hover {
-        border: 0.12rem solid rgb(66, 66, 66);
-        transition: all 0.3s;
-      }
+.inputDiv input {
+  width: 100%;
+  padding: 0.7rem 0.5rem;
+  font-size: 0.9rem;
+  outline: none;
+  border: 0.12rem solid #bab7b7;
+  border-radius: 0.5rem;
+}
 
-      .inputDiv textarea {
-        width: 100%;
-        padding: 0.7rem 0.5rem;
-        font-size: 0.9rem;
-        outline: none;
-        border: 0.12rem solid #bab7b7;
-        border-radius: 0.5rem;
-        resize: none;
-      }
+.eachInput input::placeholder {
+  color: #bab7b7;
+  font-weight: 500;
+}
 
-      .eachInput textarea::placeholder {
-        color: #bab7b7;
-        font-weight: 500;
-      }
+.eachInput input:hover {
+  border: 0.12rem solid rgb(66, 66, 66);
+  transition: all 0.3s;
+}
 
-      .eachInput textarea:hover {
-        border: 0.12rem solid rgb(66, 66, 66);
-        transition: all 0.3s;
-      }
+.inputDiv textarea {
+  width: 100%;
+  padding: 0.7rem 0.5rem;
+  font-size: 0.9rem;
+  outline: none;
+  border: 0.12rem solid #bab7b7;
+  border-radius: 0.5rem;
+  resize: none;
+}
 
-      .submit {
-        color: white;
-        background-color: #7710d2;
-        border-radius: 0.5rem;
-        box-shadow: rgba(17, 17, 17, 0.04) 0px 2px 4px 0px,
-          rgba(33, 33, 33, 0.08) 0px 8px 32px 0px;
-        border: none;
-        padding: 0.7rem 0rem;
-        font-weight: 300;
-        font-size: 0.9rem;
-      }
+.eachInput textarea::placeholder {
+  color: #bab7b7;
+  font-weight: 500;
+}
 
-      .arrowDown {
-        position: absolute;
-        top: 50%;
-        right: 14px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        transition: transform 0.2s;
-      }
+.eachInput textarea:hover {
+  border: 0.12rem solid rgb(66, 66, 66);
+  transition: all 0.3s;
+}
 
-      .rotated {
-        transform: translateY(-50%) rotate(180deg);
-      }
+.submit {
+  color: white;
+  background-color: #7710d2;
+  border-radius: 0.5rem;
+  box-shadow: rgba(17, 17, 17, 0.04) 0px 2px 4px 0px,
+    rgba(33, 33, 33, 0.08) 0px 8px 32px 0px;
+  border: none;
+  padding: 0.7rem 0rem;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
 
-      .suggestions {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        list-style: none;
-        gap: 0.5rem;
-        background-color: white;
-        width: 100%;
-        z-index: 4;
-        border-bottom-left-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
-        box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
-        display: none;
-        overflow-y: scroll;
-        max-height: 15rem;
-      }
+.arrowDown {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: transform 0.2s;
+  background-color: white;
+}
 
-      .show {
-        display: block !important;
-      }
+.rotated {
+  transform: translateY(-50%) rotate(180deg);
+}
 
-      .suggestions ul li {
-        list-style: none;
-        padding: 0.8rem;
-        cursor: pointer;
-        font-size: 0.8rem;
-      }
+.suggestions {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 0.5rem;
+  background-color: white;
+  width: 100%;
+  z-index: 4;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+  display: none;
+  overflow-y: scroll;
+  max-height: 15rem;
+}
 
-      .inputDiv:focus-within .arrow-icon {
-        transform: rotate(180deg);
-      }
-      .suggestions li.hovered {
-        background-color: #e9e9e9;
-      }
-      .suggestions li {
-        transition: background-color 0.3s ease;
-      }
+.show {
+  display: block !important;
+}
 
-      .suggestions li.selected {
-        background-color: #e9e9e9;
-      }
+.suggestions ul li {
+  list-style: none;
+  padding: 0.8rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
 
-      .errorMssg {
-        /* margin-top: 0.5rem; */
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 0.5rem;
-        position: absolute;
-        bottom: -1.2rem;
-        display: none;
-      }
-      .error-message {
-        color: #de350b;
-        font-size: 0.7rem;
-      }
+.inputDiv:focus-within .arrow-icon {
+  transform: rotate(180deg);
+}
+.suggestions li.hovered {
+  background-color: #e9e9e9;
+}
+.suggestions li {
+  transition: background-color 0.3s ease;
+}
 
-      #sourceLink:focus:invalid {
-        border-color: #de350b;
-      }
+.suggestions li.selected {
+  background-color: #e9e9e9;
+}
 
-      .selected {
-        background-color: #d4d2d2;
-      }
+.errorMssg {
+  /* margin-top: 0.5rem; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;
+  bottom: -1.2rem;
+  display: none;
+}
+.error-message {
+  color: #de350b;
+  font-size: 0.7rem;
+}
+
+#sourceLink:focus:invalid {
+  border-color: #de350b;
+}
+
+.selected {
+  background-color: #d4d2d2;
+}
+
     </style>
   </head>
   <body>

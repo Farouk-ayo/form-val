@@ -221,7 +221,7 @@ function setupMultiSelectInput(inputElement, suggestionsElement, arrowElement) {
   ];
 
   function toggleArrowAndSuggestions(eventTargetValue) {
-    arrowElement.classList.toggle("rotated");
+    arrowElement.classList.add("rotated");
     if (
       !allowedSelectors.some((selector) => {
         return event.target.closest(selector);
