@@ -5,6 +5,12 @@
   font-family: "Numans", sans-serif;
 }
 
+@media only screen and (max-width: 49rem) {
+  html {
+    font-size: 80%;
+  }
+}
+
 .mainForm {
   display: flex;
   flex-direction: column;
@@ -14,6 +20,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   padding: 5rem 0rem;
+  width: 100%;
 }
 
 .formDetails {
@@ -27,6 +34,27 @@
   gap: 2rem;
   border-radius: 1rem;
   width: 55%;
+}
+
+@media only screen and (max-width: 79rem) {
+  .formDetails {
+    width: 70%;
+  }
+}
+@media only screen and (max-width: 57rem) {
+  .formDetails {
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 49rem) {
+  .formDetails {
+    width: 90%;
+  }
+}
+@media only screen and (max-width: 39rem) {
+  .formDetails {
+    padding: 3rem 1rem;
+  }
 }
 .formDetails h2 {
   color: #240240;
@@ -59,6 +87,11 @@
   width: 70%;
   position: relative;
 }
+@media only screen and (max-width: 49rem) {
+  .eachInput span {
+    width: 65%;
+  }
+}
 
 .eachInput label {
   font-size: 1rem;
@@ -67,6 +100,13 @@
   width: 30%;
   font-size: 0.8rem;
   padding: 1rem;
+}
+
+@media only screen and (max-width: 49rem) {
+  .eachInput label {
+    padding: 0.5rem;
+    width: 35%;
+  }
 }
 
 .inputDiv {
@@ -132,6 +172,7 @@
   transform: translateY(-50%);
   cursor: pointer;
   transition: transform 0.2s;
+  background-color: white;
 }
 
 .rotated {
