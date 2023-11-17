@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    spaa
+
+    <script>
+      const apiKey =
+        "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
+      const baseId = "app7VXdu27jaUQjIV";
+      const tableId = "tblWxjOgN18FFMQ6k";
+      const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+      const populateDropdown = async (elementId, tableName) => {
+        try {
+          const response = await fetch(`${airtableApiUrl}`, {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${apiKey}`,
+            },
+            method: "GET",
+          });
+          const data = await response.json();
+          console.log(data);
+
+          // Now you can populate the dropdown with the retrieved data
+
+          console.log(data.records);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Populate dropdowns when the document is loaded
+        populateDropdown("promptCategory", "Categories");
+      });
+    </script>
+  </body>
+</html>

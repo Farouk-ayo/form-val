@@ -212,7 +212,6 @@
         transform: translateY(-50%);
         cursor: pointer;
         transition: transform 0.2s;
-        background-color: white;
       }
 
       .rotated {
@@ -978,29 +977,27 @@
       const addNewEntry = async (formData) => {
         const sourceLink = formData.get("sourceLink");
         const promptCatg = [formData.get("promptCatg")];
+        const catgVal = promptCatg[0];
 
         const promptTitle = formData.get("promptTitle");
         const promptText = formData.get("promptText");
         const promptType = formData.get("promptType");
-        console.log(promptType);
         const formattedPromptText = `{"prompt":"${promptText}}`;
         const formattedSourceLink = `${sourceLink}`;
 
         console.log(dropdownItems);
         const selectedDeptRecordIds =
           dropdownItems["SelectedDept"]?.map((obj) => obj["Record ID"]) || [];
-        console.log(selectedDeptRecordIds);
         const selectedRoleRecordIds = dropdownItems["SelectedRole"]?.map(
           (obj) => obj["Record ID"] || []
         );
         const selectedCatgIds = dropdownItems["SelectedCatg"]?.map(
           (obj) => obj["Record ID"] || []
         );
+
         const selectedPromptType = dropdownItems["SelectedPromptType"]?.map(
           (obj) => obj["Record ID"] || []
         );
-
-        console.log(selectedRoleRecordIds);
 
         try {
           const tableId = "tblWxjOgN18FFMQ6k";
@@ -1017,7 +1014,7 @@
                   fields: {
                     "Prompt Departments": selectedDeptRecordIds,
                     "Prompt Roles": selectedRoleRecordIds,
-                    "Prompt Category": selectedCatgIds,
+                    "Prompt Category.": catgVal,
                     "Prompt Title": promptTitle,
                     "Prompt Link": formattedSourceLink,
                     "Prompt Text": formattedPromptText,
