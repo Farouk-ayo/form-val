@@ -162,6 +162,11 @@
         color: #bab7b7;
         font-weight: 500;
       }
+      @media only screen and (max-width: 29rem) {
+        .eachInput input::placeholder {
+          font-size: 0.7rem;
+        }
+      }
 
       .eachInput input:hover {
         border: 0.12rem solid rgb(66, 66, 66);
@@ -177,7 +182,7 @@
         border-radius: 0.5rem;
         resize: none;
       }
-      @media only screen and (max-width: 49rem) {
+      @media only screen and (max-width: 29rem) {
         .inputDiv textarea {
           padding: 0.5rem;
           font-size: 0.7rem;
@@ -213,7 +218,6 @@
         cursor: pointer;
         transition: transform 0.2s;
       }
-
       .rotated {
         transform: translateY(-50%) rotate(180deg);
       }
@@ -261,7 +265,6 @@
       }
 
       .errorMssg {
-        /* margin-top: 0.5rem; */
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -281,6 +284,32 @@
 
       .selected {
         background-color: #d4d2d2;
+      }
+
+      #toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #1f3f75;
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        display: none;
+      }
+
+      #toast.showToast {
+        display: block;
+        animation: fadeIn 3s forwards;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          display: none;
+        }
       }
     </style>
   </head>
@@ -560,10 +589,11 @@
               </div>
             </span>
           </div>
-          <input type="submit" class="submit" />
+          <button type="submit" class="submit">Submit</button>
         </form>
       </div>
     </main>
+    <div id="toast" class="hidden"></div>
 
     <script>
       document
@@ -695,8 +725,8 @@
       function setupInput(inputElement, suggestionsElement, arrowElement) {
         function toggleArrowAndSuggestions(eventTargetValue) {
           updateSuggestionsSingle();
-          arrowElement.classList.toggle("rotated");
           suggestionsElement.classList.toggle("show");
+          arrowElement.classList.toggle("rotated");
         }
 
         arrowElement.addEventListener("click", toggleArrowAndSuggestions);
@@ -775,6 +805,7 @@
         document.addEventListener("click", function (event) {
           if (
             !inputElement.contains(event.target) &&
+            !arrowElement.contains(event.target) &&
             !suggestionsElement.contains(event.target)
           ) {
             suggestionsElement.classList.remove("show");
@@ -785,6 +816,7 @@
 
       let selectedDepartments = [];
       let selectedRoles = [];
+
       // Multiselect input
       function setupMultiSelectInput(
         inputElement,
@@ -801,7 +833,6 @@
           "suggestionsRole ul",
           "Role Name"
         );
-
         const selectedSuggestions = [];
         const allowedSelectors = [
           ".suggestionsDept ul",
@@ -836,6 +867,7 @@
               eventTargetValue.includes(obj["Role Name"])
             );
           selectedRoles = matchingRole;
+          console.log(selectedRoles, matchingRole);
           dropdownItems["SelectedRole"] = selectedRoles;
 
           if (matchingDepartments.length > 0) {
@@ -861,6 +893,8 @@
             const clickedSuggestion = event.target.textContent;
 
             const index = selectedSuggestions.indexOf(clickedSuggestion);
+            console.log(selectedSuggestions, clickedSuggestion, index);
+
             if (index === -1) {
               selectedSuggestions.push(clickedSuggestion);
               event.target.classList.add("selected");
@@ -912,20 +946,14 @@
       const suggestionsType = document.querySelector(".suggestionsType");
       const arrowType = document.querySelector(".arrowDownType");
 
-      promptType.addEventListener(
-        "focus",
-        setupInput(promptType, suggestionsType, arrowType)
-      );
+      setupInput(promptType, suggestionsType, arrowType);
 
       // Setup for the second input
       const promptCatg = document.getElementById("promptCatg");
       const suggestionsCatg = document.querySelector(".suggestionsCatg");
       const arrowCatg = document.querySelector(".arrowDownCatg");
 
-      promptCatg.addEventListener(
-        "focus",
-        setupInput(promptCatg, suggestionsCatg, arrowCatg)
-      );
+      setupInput(promptCatg, suggestionsCatg, arrowCatg);
 
       // Setup for the third input
       const promptIndustry = document.getElementById("promptIndustry");
@@ -934,35 +962,25 @@
       );
       const arrowIndustry = document.querySelector(".arrowDownIndustry");
 
-      promptIndustry.addEventListener(
-        "focus",
-        setupInput(promptIndustry, suggestionsIndustry, arrowIndustry)
-      );
+      setupInput(promptIndustry, suggestionsIndustry, arrowIndustry);
 
       // Setup for the fourth input
       const promptDept = document.getElementById("promptDept");
       const suggestionsDept = document.querySelector(".suggestionsDept");
       const arrowDept = document.querySelector(".arrowDownDept");
 
-      promptDept.addEventListener(
-        "focus",
-        setupMultiSelectInput(promptDept, suggestionsDept, arrowDept)
-      );
+      setupMultiSelectInput(promptDept, suggestionsDept, arrowDept);
 
       // Setup for the fifth input
       const promptRole = document.getElementById("promptRole");
       const suggestionsRole = document.querySelector(".suggestionsRole");
       const arrowRole = document.querySelector(".arrowDownRole");
 
-      promptRole.addEventListener(
-        "focus",
-        setupMultiSelectInput(promptRole, suggestionsRole, arrowRole)
-      );
+      setupMultiSelectInput(promptRole, suggestionsRole, arrowRole);
+      const sourceLinkInput = document.getElementById("sourceLink");
+      const errorMessage = document.querySelector(".errorMssg");
 
       document.addEventListener("DOMContentLoaded", function () {
-        const sourceLinkInput = document.getElementById("sourceLink");
-        const errorMessage = document.querySelector(".errorMssg");
-
         function validateInput() {
           if (!sourceLinkInput.checkValidity()) {
             errorMessage.style.display = "flex";
@@ -973,6 +991,16 @@
         sourceLinkInput.addEventListener("blur", validateInput);
         sourceLinkInput.addEventListener("input", validateInput);
       });
+
+      const showToast = (message) => {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("showToast");
+
+        setTimeout(() => {
+          toast.classList.remove("showToast");
+        }, 10000);
+      };
 
       const addNewEntry = async (formData) => {
         const sourceLink = formData.get("sourceLink");
@@ -985,7 +1013,6 @@
         const formattedPromptText = `{"prompt":"${promptText}}`;
         const formattedSourceLink = `${sourceLink}`;
 
-        console.log(dropdownItems);
         const selectedDeptRecordIds =
           dropdownItems["SelectedDept"]?.map((obj) => obj["Record ID"]) || [];
         const selectedRoleRecordIds = dropdownItems["SelectedRole"]?.map(
@@ -998,6 +1025,9 @@
         const selectedPromptType = dropdownItems["SelectedPromptType"]?.map(
           (obj) => obj["Record ID"] || []
         );
+
+        const submitButton = document.querySelector(".submit");
+        submitButton.textContent = "Submitting...";
 
         try {
           const tableId = "tblWxjOgN18FFMQ6k";
@@ -1025,23 +1055,40 @@
             }),
             method: "POST",
           });
-          const data = await response.json();
 
-          console.log(data);
+          if (response.ok) {
+            const data = await response.json();
+            const form = document.getElementById("myForm");
+            form.reset();
+            showToast("Successfully submitted!");
+
+            window.location.replace(window.location.href);
+          } else {
+            console.error("Error:", response.status, response.statusText);
+            showToast("Submission failed");
+          }
         } catch (error) {
           console.error("Error:", error);
+          showToast("Submission failed");
+        } finally {
+          submitButton.textContent = "Submit";
+          submitButton.disabled = false;
         }
       };
+      const form = document.getElementById("myForm");
 
-      document
-        .getElementById("myForm")
-        .addEventListener("submit", function (event) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        addNewEntry(formData);
+      });
+      form.addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
           event.preventDefault();
-
-          const formData = new FormData(event.target);
-
           addNewEntry(formData);
-        });
+        }
+      });
     </script>
   </body>
 </html>
