@@ -311,6 +311,44 @@
           display: none;
         }
       } /* Loader */
+      /* CSS */
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(
+          0,
+          0,
+          0,
+          0.5
+        ); /* Adjust the alpha value for darkness */
+        z-index: 999;
+      }
+      .loader {
+        display: none;
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
@@ -594,6 +632,15 @@
       </div>
     </main>
     <div id="toast" class="hidden"></div>
+    <!-- HTML -->
+    <div id="overlay" class="overlay"></div>
+    <div id="loader" class="loader"></div>
+    <div id="success-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <p id="success-message">Success!</p>
+      </div>
+    </div>
 
     <script>
       document
@@ -998,6 +1045,13 @@
           toast.classList.remove("showToast");
         }, 10000);
       };
+      const closeModal = () => {
+        const modal = document.getElementById("success-modal");
+        modal.style.display = "none";
+
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "none";
+      };
 
       const addNewEntry = async (formData) => {
         const sourceLink = formData.get("sourceLink");
@@ -1027,7 +1081,11 @@
         submitButton.textContent = "Submitting...";
 
         try {
+          const loader = document.getElementById("loader");
+          const modal = document.getElementById("success-modal");
+          const overlay = document.getElementById("overlay");
           const tableId = "tblWxjOgN18FFMQ6k";
+          loader.style.display = "block"; // Show loader
 
           const response = await fetch(`${airtableApiUrl}${tableId}`, {
             headers: {
@@ -1055,36 +1113,54 @@
 
           if (response.ok) {
             submitButton.disabled = true;
-
             const data = await response.json();
             const form = document.getElementById("myForm");
             form.reset();
             showToast("Successfully submitted!");
-            window.location.replace(window.location.href);
+            loader.style.display = "none"; // Hide loader
+            modal.style.display = "block"; // Show success modal
+            overlay.style.display = "block";
+            closeModal();
+            setTimeout(() => {
+              window.location.replace(window.location.href);
+            }, 3000);
           } else {
             console.error("Error:", response.status, response.statusText);
             submitButton.disabled = false;
+
             showToast("Submission failed");
           }
         } catch (error) {
           console.error("Error:", error);
+
           showToast("Submission failed");
         } finally {
+          overlay.style.display = "none"; // Ensure overlay is hidden even if there's an error
+          loader.style.display = "none";
           submitButton.textContent = "Submit";
           submitButton.disabled = false;
         }
       };
       const form = document.getElementById("myForm");
+      const overlay = document.getElementById("overlay");
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const formData = new FormData(event.target);
+        overlay.style.display = "block"; // Show overlay
+
+        const modal = document.getElementById("success-modal");
+        modal.style.display = "none"; // Hide success modal
         addNewEntry(formData);
       });
       form.addEventListener("keydown", function (event) {
         if (event.keyCode === 13) {
           event.preventDefault();
+          overlay.style.display = "block"; // Show overlay
+
+          const modal = document.getElementById("success-modal");
+          modal.style.display = "none"; // Hide success modal
           addNewEntry(formData);
         }
       });
