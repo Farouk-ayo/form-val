@@ -310,7 +310,7 @@
           opacity: 1;
           display: none;
         }
-      }
+      } /* Loader */
     </style>
   </head>
   <body>
@@ -752,7 +752,6 @@
                 );
               });
 
-            console.log(matchingPromptType);
             if (matchingPromptType.length > 0) {
               selectedPromptType = matchingPromptType;
               dropdownItems["SelectedPromptType"] = selectedPromptType;
@@ -867,7 +866,6 @@
               eventTargetValue.includes(obj["Role Name"])
             );
           selectedRoles = matchingRole;
-          console.log(selectedRoles, matchingRole);
           dropdownItems["SelectedRole"] = selectedRoles;
 
           if (matchingDepartments.length > 0) {
@@ -893,7 +891,6 @@
             const clickedSuggestion = event.target.textContent;
 
             const index = selectedSuggestions.indexOf(clickedSuggestion);
-            console.log(selectedSuggestions, clickedSuggestion, index);
 
             if (index === -1) {
               selectedSuggestions.push(clickedSuggestion);
@@ -1057,14 +1054,16 @@
           });
 
           if (response.ok) {
+            submitButton.disabled = true;
+
             const data = await response.json();
             const form = document.getElementById("myForm");
             form.reset();
             showToast("Successfully submitted!");
-
             window.location.replace(window.location.href);
           } else {
             console.error("Error:", response.status, response.statusText);
+            submitButton.disabled = false;
             showToast("Submission failed");
           }
         } catch (error) {
