@@ -39,6 +39,7 @@ const populateDropdown = async (tableId, htmlTag, fieldName, items) => {
   }
 
   const data = await response.json();
+  console.log(data);
 
   dropdownItems[fieldName] =
     items || data.records.map((record) => record.fields);

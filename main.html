@@ -312,7 +312,7 @@
         }
       } /* Loader */
       /* CSS */
-      .overlay {
+      #overlay {
         display: none;
         position: fixed;
         top: 0;
@@ -348,6 +348,46 @@
         100% {
           transform: rotate(360deg);
         }
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px;
+        position: relative;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+
+      /* Add some styling for the success message and icon */
+      #success-message {
+        color: #4caf50;
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      #success-icon {
+        color: #4caf50;
+        font-size: 40px;
+        margin-bottom: 20px;
       }
     </style>
   </head>
@@ -638,7 +678,8 @@
     <div id="success-modal" class="modal">
       <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
-        <p id="success-message">Success!</p>
+        <p id="success-icon">✅</p>
+        <p id="success-message">Form submitted successfully!</p>
       </div>
     </div>
 
@@ -879,7 +920,7 @@
           "suggestionsRole ul",
           "Role Name"
         );
-        const selectedSuggestions = [];
+        let selectedSuggestions = [];
         const allowedSelectors = [
           ".suggestionsDept ul",
           ".suggestionsCatg ul",
@@ -953,19 +994,90 @@
 
         // Update the input value based on selected suggestions
         function updateInputValue() {
-          inputElement.value = selectedSuggestions.join(", ");
+          if (selectedSuggestions) {
+            inputElement.value = selectedSuggestions.join(", ");
+          }
         }
 
         // Add input event listener to filter suggestions while typing
         inputElement.addEventListener("input", function () {
-          filterSuggestions(inputElement.value.trim().toLowerCase());
+          const currentValue = inputElement.value
+            .split(",")
+            .map((item) => item.trim().toLowerCase());
+          filterSuggestions(currentValue);
+          updateSelectedSuggestions(currentValue);
         });
 
-        function filterSuggestions(filterText) {
+        // Custom function to find an element containing specific text content
+        function findElementByTextContent(parentElement, text) {
+          const elements = parentElement.querySelectorAll("li");
+
+          for (const element of elements) {
+            if (
+              element.textContent.trim().toLowerCase() === text.toLowerCase()
+            ) {
+              return element;
+            }
+          }
+
+          return null;
+        }
+
+        function updateSelectedSuggestions(currentValue) {
+          const newSelectedSuggestions = selectedSuggestions.filter(
+            (suggestion) =>
+              currentValue.some(
+                (value) =>
+                  value.trim().toLowerCase() === suggestion.toLowerCase()
+              )
+          );
+
+          // Iterate over the existing selected suggestions
+          selectedSuggestions.forEach((suggestion) => {
+            const matchingLi = findElementByTextContent(
+              suggestionsElement,
+              suggestion
+            );
+
+            if (!newSelectedSuggestions.includes(suggestion)) {
+              // Remove the selected class from the suggestion
+              if (matchingLi) {
+                matchingLi.classList.remove("selected");
+              }
+            }
+          });
+
+          // Iterate over the newly selected suggestions
+          newSelectedSuggestions.forEach((suggestion) => {
+            // Add the selected class to the suggestion if it wasn't selected before
+            if (!selectedSuggestions.includes(suggestion)) {
+              const matchingLi = findElementByTextContent(
+                suggestionsElement,
+                suggestion
+              );
+
+              if (matchingLi) {
+                matchingLi.classList.add("selected");
+              }
+            }
+          });
+
+          // console.log(selectedSuggestions, newSelectedSuggestions);
+          // Update the selected suggestions array
+          selectedSuggestions = newSelectedSuggestions;
+
+          filterSuggestions(currentValue);
+        }
+
+        function filterSuggestions(filterArray) {
           const suggestions = suggestionsElement.querySelectorAll("li");
           suggestions.forEach((li) => {
             const suggestionText = li.textContent.toLowerCase();
-            if (suggestionText.includes(filterText)) {
+            if (
+              filterArray.some((filterItem) =>
+                suggestionText.includes(filterItem)
+              )
+            ) {
               li.style.display = "block"; // Show the suggestion
             } else {
               li.style.display = "none"; // Hide the suggestion
@@ -990,14 +1102,20 @@
       const suggestionsType = document.querySelector(".suggestionsType");
       const arrowType = document.querySelector(".arrowDownType");
 
-      setupInput(promptType, suggestionsType, arrowType);
+      promptType.addEventListener(
+        "focus",
+        setupInput(promptType, suggestionsType, arrowType)
+      );
 
       // Setup for the second input
       const promptCatg = document.getElementById("promptCatg");
       const suggestionsCatg = document.querySelector(".suggestionsCatg");
       const arrowCatg = document.querySelector(".arrowDownCatg");
 
-      setupInput(promptCatg, suggestionsCatg, arrowCatg);
+      promptCatg.addEventListener(
+        "focus",
+        setupInput(promptCatg, suggestionsCatg, arrowCatg)
+      );
 
       // Setup for the third input
       const promptIndustry = document.getElementById("promptIndustry");
@@ -1006,21 +1124,30 @@
       );
       const arrowIndustry = document.querySelector(".arrowDownIndustry");
 
-      setupInput(promptIndustry, suggestionsIndustry, arrowIndustry);
+      promptIndustry.addEventListener(
+        "focus",
+        setupInput(promptIndustry, suggestionsIndustry, arrowIndustry)
+      );
 
       // Setup for the fourth input
       const promptDept = document.getElementById("promptDept");
       const suggestionsDept = document.querySelector(".suggestionsDept");
       const arrowDept = document.querySelector(".arrowDownDept");
 
-      setupMultiSelectInput(promptDept, suggestionsDept, arrowDept);
+      promptDept.addEventListener(
+        "focus",
+        setupMultiSelectInput(promptDept, suggestionsDept, arrowDept)
+      );
 
       // Setup for the fifth input
       const promptRole = document.getElementById("promptRole");
       const suggestionsRole = document.querySelector(".suggestionsRole");
       const arrowRole = document.querySelector(".arrowDownRole");
 
-      setupMultiSelectInput(promptRole, suggestionsRole, arrowRole);
+      promptRole.addEventListener(
+        "focus",
+        setupMultiSelectInput(promptRole, suggestionsRole, arrowRole)
+      );
       const sourceLinkInput = document.getElementById("sourceLink");
       const errorMessage = document.querySelector(".errorMssg");
 
@@ -1045,12 +1172,14 @@
           toast.classList.remove("showToast");
         }, 10000);
       };
+
       const closeModal = () => {
         const modal = document.getElementById("success-modal");
         modal.style.display = "none";
-
         const overlay = document.getElementById("overlay");
         overlay.style.display = "none";
+        window.location.replace(window.location.href);
+        console.log("close");
       };
 
       const addNewEntry = async (formData) => {
@@ -1087,6 +1216,8 @@
           const tableId = "tblWxjOgN18FFMQ6k";
           loader.style.display = "block"; // Show loader
 
+          modal.addEventListener("click", closeModal);
+
           const response = await fetch(`${airtableApiUrl}${tableId}`, {
             headers: {
               accept: "application/json",
@@ -1114,16 +1245,13 @@
           if (response.ok) {
             submitButton.disabled = true;
             const data = await response.json();
+            console.log(data);
             const form = document.getElementById("myForm");
             form.reset();
-            showToast("Successfully submitted!");
-            loader.style.display = "none"; // Hide loader
-            modal.style.display = "block"; // Show success modal
+            // showToast("Successfully submitted!");
+            loader.style.display = "none";
+            modal.style.display = "block";
             overlay.style.display = "block";
-            closeModal();
-            setTimeout(() => {
-              window.location.replace(window.location.href);
-            }, 3000);
           } else {
             console.error("Error:", response.status, response.statusText);
             submitButton.disabled = false;
@@ -1132,10 +1260,9 @@
           }
         } catch (error) {
           console.error("Error:", error);
-
           showToast("Submission failed");
         } finally {
-          overlay.style.display = "none"; // Ensure overlay is hidden even if there's an error
+          overlay.style.display = "none";
           loader.style.display = "none";
           submitButton.textContent = "Submit";
           submitButton.disabled = false;
@@ -1146,21 +1273,18 @@
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
-
         const formData = new FormData(event.target);
-        overlay.style.display = "block"; // Show overlay
-
-        const modal = document.getElementById("success-modal");
-        modal.style.display = "none"; // Hide success modal
+        overlay.style.display = "block";
         addNewEntry(formData);
       });
+
       form.addEventListener("keydown", function (event) {
         if (event.keyCode === 13) {
           event.preventDefault();
-          overlay.style.display = "block"; // Show overlay
-
+          overlay.style.display = "block";
           const modal = document.getElementById("success-modal");
-          modal.style.display = "none"; // Hide success modal
+          modal.style.display = "none";
+          const formData = new FormData(event.target);
           addNewEntry(formData);
         }
       });
