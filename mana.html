@@ -7,12 +7,15 @@
   </head>
   <body>
     spaa
+    <script src="
+    https://cdn.jsdelivr.net/npm/airtable@0.12.2/lib/airtable.umd.min.js
+    "></script>
 
     <script>
       const apiKey =
         "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
       const baseId = "app7VXdu27jaUQjIV";
-      const tableId = "tblWxjOgN18FFMQ6k";
+      const tableId = "tblNOSfTqt31iJZY8";
       const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
       const populateDropdown = async (elementId, tableName) => {
         try {
@@ -24,7 +27,6 @@
             method: "GET",
           });
           const data = await response.json();
-          console.log(data);
 
           // Now you can populate the dropdown with the retrieved data
 
@@ -38,6 +40,76 @@
         // Populate dropdowns when the document is loaded
         populateDropdown("promptCategory", "Categories");
       });
+      // Replace with your Airtable API key
+      // const apiKey =
+      //   "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
+
+      // const airtable = new Airtable({ apiKey: apiKey }).base(
+      //   "app7VXdu27jaUQjIV"
+      // );
+
+      // // const table = airtable("Prompts"); // Replace 'YourTable' with your actual table name
+      // // Step 1: Create Records in the Linked Table
+      // const rolesTable = airtable("tblNOSfTqt31iJZY8");
+      // console.log(rolesTable);
+      // const createdRoles = [];
+
+      // ["book", "bro", "goat"].forEach((roleName) => {
+      //   rolesTable.create({ "Role Name": roleName }, function (err, record) {
+      //     if (err) {
+      //       console.error(err);
+      //     } else {
+      //       createdRoles.push(record.getId());
+      //       console.log(record.getId());
+      //     }
+      //   });
+      // });
+      // console.log(createdRoles);
+
+      // // Step 2: Link Records in the Main Table
+      // const mainTable = airtable("tblWxjOgN18FFMQ6k");
+
+      // mainTable.create(
+      //   {
+      //     "Prompt Roles": createdRoles,
+      //   },
+      //   function (err, record) {
+      //     if (err) {
+      //       console.error(err);
+      //     } else {
+      //       console.log("Main record created:", record.getId());
+      //     }
+      //   }
+      // );
+
+      // const apiKey =
+      //   "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
+
+      // const airtable = new Airtable({ apiKey: apiKey }).base(
+      //   "app7VXdu27jaUQjIV"
+      // );
+
+      // // Create an async function to handle the asynchronous calls
+      // async function createRoleRecords(tableId, array) {
+      //   const rolesTable = airtable("tblNOSfTqt31iJZY8");
+      //   let createdRoles = [];
+
+      //   for (const roleName of ["book", "bro", "goat"]) {
+      //     const record = await new Promise((resolve, reject) => {
+      //       rolesTable.create({ "Role Name": roleName }, (err, record) => {
+      //         if (err) {
+      //           reject(err);
+      //         } else {
+      //           resolve(record);
+      //         }
+      //       });
+      //     });
+
+      //     createdRoles.push(record.getId());
+      //   }
+
+      //   return createdRoles;
+      // }
     </script>
   </body>
 </html>

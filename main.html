@@ -682,7 +682,9 @@
         <p id="success-message">Form submitted successfully!</p>
       </div>
     </div>
-
+    <script src="
+    https://cdn.jsdelivr.net/npm/airtable@0.12.2/lib/airtable.umd.min.js
+    "></script>
     <script>
       document
         .getElementById("sourceLink")
@@ -1062,7 +1064,6 @@
             }
           });
 
-          // console.log(selectedSuggestions, newSelectedSuggestions);
           // Update the selected suggestions array
           selectedSuggestions = newSelectedSuggestions;
 
@@ -1179,12 +1180,19 @@
         const overlay = document.getElementById("overlay");
         overlay.style.display = "none";
         window.location.replace(window.location.href);
-        console.log("close");
       };
+
+      const apiKey2 =
+        "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
+
+      const airtable2 = new Airtable({ apiKey: apiKey2 }).base(
+        "app7VXdu27jaUQjIV"
+      );
 
       const addNewEntry = async (formData) => {
         const sourceLink = formData.get("sourceLink");
         const promptCatg = [formData.get("promptCatg")];
+
         const catgVal = promptCatg[0];
 
         const promptTitle = formData.get("promptTitle");
@@ -1193,11 +1201,64 @@
         const formattedPromptText = `{"prompt":"${promptText}}`;
         const formattedSourceLink = `${sourceLink}`;
 
+        // Create an async function to handle the asynchronous calls
+        async function createRecords(tableId, arrays, fieldName) {
+          const rolesTable = airtable2(tableId);
+          let createdRoles = [];
+
+          for (const nameType of arrays) {
+            try {
+              const record = await new Promise((resolve, reject) => {
+                const data = {
+                  [fieldName]: nameType,
+                };
+
+                rolesTable.create(data, (err, record) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve(record);
+                  }
+                });
+              });
+
+              createdRoles.push(record.getId());
+            } catch (error) {
+              console.error(`Error creating record for ${nameType}: ${error}`);
+            }
+          }
+
+          return createdRoles;
+        }
+        const promptDepartment = formData
+          .get("promptDept")
+          .split(",")
+          .map((item) => item.trim());
+
+        const promptRoles = formData
+          .get("promptRole")
+          .split(",")
+          .map((item) => item.trim());
+
+        const departmentRecordIds = await createRecords(
+          "tbl1L1BhG3RIFZPl9",
+          promptDepartment,
+          "Department"
+        );
+
+        const roleRecordIds = await createRecords(
+          "tblNOSfTqt31iJZY8",
+          promptRoles,
+          "Role Name"
+        );
+
         const selectedDeptRecordIds =
           dropdownItems["SelectedDept"]?.map((obj) => obj["Record ID"]) || [];
+
         const selectedRoleRecordIds = dropdownItems["SelectedRole"]?.map(
           (obj) => obj["Record ID"] || []
         );
+
         const selectedCatgIds = dropdownItems["SelectedCatg"]?.map(
           (obj) => obj["Record ID"] || []
         );
@@ -1205,6 +1266,17 @@
         const selectedPromptType = dropdownItems["SelectedPromptType"]?.map(
           (obj) => obj["Record ID"] || []
         );
+
+        const finalDeptRecordIds =
+          Array.isArray(selectedDeptRecordIds) ||
+          selectedDeptRecordIds.length === 0
+            ? departmentRecordIds
+            : selectedDeptRecordIds;
+
+        const finalRoleRecordIds =
+          selectedRoleRecordIds === undefined
+            ? roleRecordIds
+            : selectedRoleRecordIds;
 
         const submitButton = document.querySelector(".submit");
         submitButton.textContent = "Submitting...";
@@ -1214,7 +1286,7 @@
           const modal = document.getElementById("success-modal");
           const overlay = document.getElementById("overlay");
           const tableId = "tblWxjOgN18FFMQ6k";
-          loader.style.display = "block"; // Show loader
+          loader.style.display = "block";
 
           modal.addEventListener("click", closeModal);
 
@@ -1228,8 +1300,8 @@
               records: [
                 {
                   fields: {
-                    "Prompt Departments": selectedDeptRecordIds,
-                    "Prompt Roles": selectedRoleRecordIds,
+                    "Prompt Departments": finalDeptRecordIds,
+                    "Prompt Roles": finalRoleRecordIds,
                     "Prompt Category.": catgVal,
                     "Prompt Title": promptTitle,
                     "Prompt Link": formattedSourceLink,
@@ -1275,6 +1347,7 @@
         event.preventDefault();
         const formData = new FormData(event.target);
         overlay.style.display = "block";
+
         addNewEntry(formData);
       });
 

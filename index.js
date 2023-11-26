@@ -68,7 +68,7 @@ let promptRoleOptions;
 async function updateSuggestions(departments) {
   const existingPromptRoleOptions = dropdownItems["Role Name"];
   await populateDropdown(
-    "tblNOSfTqt31iJZY8",
+    "tblWxjOgN18FFMQ6k",
     "suggestionsRole ul",
     "Role Name"
   );
