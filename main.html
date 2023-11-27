@@ -762,6 +762,7 @@
 
         const promptRoleOptions = dropdownItems["Role Name"].filter((role) => {
           const roleDepartments = role["Departments"];
+          // console.log(roleDepartments);
           if (roleDepartments) {
             return roleDepartments.some((dept) => departments.includes(dept));
           } else {
@@ -812,6 +813,8 @@
 
       let selectedPromptType = [];
       let selectedCatg = [];
+      let selectedPromptIndustry = [];
+
       function setupInput(inputElement, suggestionsElement, arrowElement) {
         function toggleArrowAndSuggestions(eventTargetValue) {
           updateSuggestionsSingle();
@@ -846,6 +849,18 @@
               selectedPromptType = matchingPromptType;
               dropdownItems["SelectedPromptType"] = selectedPromptType;
               updateSuggestions(dropdownItems["SelectedPromptType"]);
+            }
+
+            const matchingPromptIndustry =
+              dropdownItems["promptIndustry"] &&
+              dropdownItems["promptIndustry"].filter((obj) => {
+                return event.target.textContent.includes(obj["Industry Name"]);
+              });
+
+            if (matchingPromptIndustry.length > 0) {
+              selectedPromptIndustry = matchingPromptIndustry;
+              dropdownItems["SelectedPromptIndustry"] = selectedPromptIndustry;
+              updateSuggestions(dropdownItems["SelectedPromptIndustry"]);
             }
 
             const matchingCatg =
@@ -949,7 +964,7 @@
             dropdownItems["SelectedDept"] = selectedDepartments;
             updateSuggestions(dropdownItems["SelectedDept"]);
           }
-
+          console.log(matchingDepartments);
           const matchingRole =
             dropdownItems["Role Name"] &&
             dropdownItems["Role Name"].filter((obj) =>
@@ -965,6 +980,7 @@
             dropdownItems["Record IDs"] = departmentRecordIds;
             updateSuggestions(dropdownItems["Record IDs"]);
           }
+          console.log(dropdownItems["Record IDs"]);
         }
 
         arrowElement.addEventListener("click", toggleArrowAndSuggestions);
@@ -1192,8 +1208,10 @@
       const addNewEntry = async (formData) => {
         const sourceLink = formData.get("sourceLink");
         const promptCatg = [formData.get("promptCatg")];
+        const promptIndustry = [formData.get("promptIndustry")];
 
         const catgVal = promptCatg[0];
+        const industryVal = promptIndustry[0];
 
         const promptTitle = formData.get("promptTitle");
         const promptText = formData.get("promptText");
@@ -1266,6 +1284,11 @@
         const selectedPromptType = dropdownItems["SelectedPromptType"]?.map(
           (obj) => obj["Record ID"] || []
         );
+        const selectedPromptIndustry = dropdownItems[
+          "SelectedPromptIndustry"
+        ]?.map((obj) => obj["Record ID"] || []);
+
+        console.log(selectedPromptIndustry);
 
         const finalDeptRecordIds =
           Array.isArray(selectedDeptRecordIds) ||
@@ -1307,13 +1330,14 @@
                     "Prompt Link": formattedSourceLink,
                     "Prompt Text": formattedPromptText,
                     "Prompt Type": selectedPromptType,
+                    "Prompt Industry": selectedPromptIndustry,
                   },
                 },
               ],
             }),
             method: "POST",
           });
-
+          console.log(response);
           if (response.ok) {
             submitButton.disabled = true;
             const data = await response.json();
@@ -1325,6 +1349,7 @@
             modal.style.display = "block";
             overlay.style.display = "block";
           } else {
+            console.log(response);
             console.error("Error:", response.status, response.statusText);
             submitButton.disabled = false;
 
