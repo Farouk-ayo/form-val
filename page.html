@@ -699,72 +699,96 @@
 
           event.target.value = currentValue;
         });
-
       const apiKey =
         "patMrA1yTk0zv7iVa.7f023b4c27161b1c55d49f923c65cbb82aeca4e0842b44a6aca1f984edac12ca";
       const baseId = "app7VXdu27jaUQjIV";
       const airtableApiUrl = `https://api.airtable.com/v0/${baseId}/`;
 
       let dropdownItems = {};
-      const populateDropdown = async (tableId, htmlTag, fieldName, items) => {
-        const suggestionsElement = document.querySelector(`.${htmlTag}`);
-        suggestionsElement.innerHTML = "<li>Loading...</li>";
 
-        let offset = null;
-        let allRecords = [];
+      const fetchRecords = async (tableId, pageSize = 100, offset = null) => {
+        const url = `${airtableApiUrl}${tableId}?pageSize=${pageSize}${
+          offset ? `&offset=${offset}` : ""
+        }`;
 
-        do {
-          let url = `${airtableApiUrl}${tableId}?view=Grid%20view&pageSize=100`;
-          if (offset) {
-            url += `&offset=${offset}`;
-          }
-
+        try {
           const response = await fetch(url, {
+            method: "GET",
             headers: {
               accept: "application/json",
               Authorization: `Bearer ${apiKey}`,
             },
-            method: "GET",
           });
 
           if (!response.ok) {
-            const errorMessage = `Error: ${response.status} - ${response.statusText}`;
-            console.error(errorMessage);
-            suggestionsElement.innerHTML = `<li>${errorMessage}</li>`;
-            return null;
+            throw new Error(
+              `Error: ${response.status} - ${response.statusText}`
+            );
           }
 
-          const data = await response.json();
-          allRecords = allRecords.concat(data.records);
-          offset = data.offset;
-        } while (offset);
+          return await response.json();
+        } catch (error) {
+          console.error(`Error fetching records: ${error.message}`);
+          throw error;
+        }
+      };
 
-        dropdownItems[fieldName] =
-          items || allRecords.map((record) => record.fields);
+      const populateDropdown = async (
+        tableId,
+        htmlTag,
+        fieldName,
+        // items,
+        items = []
+      ) => {
+        const suggestionsElement = document.querySelector(`.${htmlTag}`);
+        suggestionsElement.innerHTML = "<li>Loading...</li>";
 
-        suggestionsElement.innerHTML = "";
+        let offset = null;
 
-        dropdownItems[fieldName].forEach((item) => {
-          const li = document.createElement("li");
-          if (fieldName === "promptType") {
-            li.textContent = item["Prompt Type Names"];
-          } else if (fieldName === "promptIndustry") {
-            li.textContent = item["Industry Name"];
-          } else if (fieldName === "promptCatg") {
-            li.textContent = item["Name"];
-          } else {
-            li.textContent = item[fieldName];
-          }
-          suggestionsElement.appendChild(li);
-        });
+        try {
+          do {
+            const data = await fetchRecords(tableId, 100, offset);
 
-        return dropdownItems[fieldName];
+            if (data.records) {
+              items = items.concat(data.records.map((record) => record.fields));
+            }
+
+            console.log(items);
+            offset = data.offset;
+          } while (offset);
+
+          dropdownItems[fieldName] = items;
+
+          suggestionsElement.innerHTML = "";
+
+          dropdownItems[fieldName].forEach((item) => {
+            const li = document.createElement("li");
+            if (fieldName === "promptType") {
+              li.textContent = item["Prompt Type Names"];
+            } else if (fieldName === "promptIndustry") {
+              li.textContent = item["Industry Name"];
+            } else if (fieldName === "promptCatg") {
+              li.textContent = item["Name"];
+            } else {
+              li.textContent = item[fieldName];
+            }
+            suggestionsElement.appendChild(li);
+          });
+
+          return dropdownItems[fieldName];
+        } catch (error) {
+          const errorMessage = `Error: ${error.message}`;
+          console.error(errorMessage);
+          suggestionsElement.innerHTML = `<li>${errorMessage}</li>`;
+          return null;
+        }
       };
 
       let promptRoleOptions;
 
       async function updateSuggestions(departments) {
         const existingPromptRoleOptions = dropdownItems["Role Name"];
+        console.log(existingPromptRoleOptions);
         await populateDropdown(
           "tblNOSfTqt31iJZY8",
           "suggestionsRole ul",
@@ -773,7 +797,6 @@
 
         const promptRoleOptions = dropdownItems["Role Name"].filter((role) => {
           const roleDepartments = role["Departments"];
-          // console.log(roleDepartments);
           if (roleDepartments) {
             return roleDepartments.some((dept) => departments.includes(dept));
           } else {
@@ -781,19 +804,22 @@
           }
         });
 
+        console.log(promptRoleOptions);
+
         const filteredPromptRoleOptions = await populateDropdown(
           "tblNOSfTqt31iJZY8",
           "suggestionsRole ul",
           "Role Name",
           promptRoleOptions
         );
+        console.log(filteredPromptRoleOptions);
 
         const updatedPromptRoleOptions = existingPromptRoleOptions.concat(
           filteredPromptRoleOptions
         );
 
         if (updatedPromptRoleOptions.length > 0) {
-          let roleRecord = updatedPromptRoleOptions.map((role) => {
+          const roleRecord = updatedPromptRoleOptions.map((role) => {
             dropdownItems["Role Name"] = roleRecord;
 
             return role;
@@ -822,9 +848,9 @@
         );
       }
 
-      let selectedPromptIndustry = [];
       let selectedPromptType = [];
       let selectedCatg = [];
+      let selectedPromptIndustry = [];
 
       function setupInput(inputElement, suggestionsElement, arrowElement) {
         function toggleArrowAndSuggestions(eventTargetValue) {
@@ -1218,8 +1244,15 @@
 
       const addNewEntry = async (formData) => {
         const sourceLink = formData.get("sourceLink");
+        const promptCatg = [formData.get("promptCatg")];
+        // const promptIndustry = [formData.get("promptIndustry")];
+
+        const catgVal = promptCatg[0];
+        const industryVal = promptIndustry[0];
+
         const promptTitle = formData.get("promptTitle");
         const promptText = formData.get("promptText");
+        const promptType = formData.get("promptType");
         const formattedPromptText = `{"prompt":"${promptText}}`;
         const formattedSourceLink = `${sourceLink}`;
 
@@ -1249,26 +1282,9 @@
               console.error(`Error creating record for ${nameType}: ${error}`);
             }
           }
-          console.log(createdRoles);
 
           return createdRoles;
         }
-
-        const promptType = formData
-          .get("promptType")
-          .split(",")
-          .map((item) => item.trim());
-
-        const promptIndustry = formData
-          .get("promptIndustry")
-          .split(",")
-          .map((item) => item.trim());
-
-        const promptCategory = formData
-          .get("promptCatg")
-          .split(",")
-          .map((item) => item.trim());
-
         const promptDepartment = formData
           .get("promptDept")
           .split(",")
@@ -1279,78 +1295,39 @@
           .split(",")
           .map((item) => item.trim());
 
-        let typeRecordIds = [];
-        let industryRecordIds = [];
-        let categoryRecordIds = [];
-        let departmentRecordIds = [];
-        let roleRecordIds = [];
+        // const promptCatg = formData
+        //   .get("promptCatg")
+        //   .split(",")
+        //   .map((item) => item.trim());
 
-        console.log(selectedPromptType);
-        console.log(selectedPromptIndustry);
-        console.log(selectedCatg);
-        console.log(selectedDepartments);
-        console.log(selectedRoles);
+        // const promptIndustry = formData
+        //   .get("promptIndustry")
+        //   .split(",")
+        //   .map((item) => item.trim());
 
-        if (
-          promptIndustry.length > 0 &&
-          !selectedPromptIndustry.some((industry) =>
-            promptIndustry.includes(industry["Industry Name"])
-          )
-        ) {
-          industryRecordIds = await createRecords(
-            "tblcQPjP9SPEEXmph",
-            promptIndustry,
-            "Industry Name"
-          );
-        }
-        if (
-          promptType.length > 0 &&
-          !selectedPromptType.some((type) =>
-            promptType.includes(type["Prompt Type Names"])
-          )
-        ) {
-          typeRecordIds = await createRecords(
-            "tbldLUtMAk0sfvwIF",
-            promptType,
-            "Prompt Type Names"
-          );
-        }
-        if (
-          promptCategory.length > 0 &&
-          !selectedCatg.some((category) =>
-            promptCategory.includes(category["Name"])
-          )
-        ) {
-          categoryRecordIds = await createRecords(
-            "tblFJNzh7J8Bv2Uip",
-            promptCategory,
-            "Name"
-          );
-        }
+        const departmentRecordIds = await createRecords(
+          "tbl1L1BhG3RIFZPl9",
+          promptDepartment,
+          "Department"
+        );
 
-        if (
-          promptDepartment.length > 0 &&
-          !selectedDepartments.some((dept) =>
-            promptDepartment.includes(dept.Department)
-          )
-        ) {
-          departmentRecordIds = await createRecords(
-            "tbl1L1BhG3RIFZPl9",
-            promptDepartment,
-            "Department"
-          );
-        }
+        const roleRecordIds = await createRecords(
+          "tblNOSfTqt31iJZY8",
+          promptRoles,
+          "Role Name"
+        );
 
-        if (
-          promptRoles.length > 0 &&
-          !selectedRoles.some((role) => promptRoles.includes(role["Role Name"]))
-        ) {
-          roleRecordIds = await createRecords(
-            "tblNOSfTqt31iJZY8",
-            promptRoles,
-            "Role Name"
-          );
-        }
+        // const industryRecordIds = await createRecords(
+        //   "tblcQPjP9SPEEXmph",
+        //   promptIndustry,
+        //   "Industry Name"
+        // );
+
+        // const categoryRecordIds = await createRecords(
+        //   "tblFJNzh7J8Bv2Uip",
+        //   promptCatg,
+        //   "Name"
+        // );
 
         const selectedDeptRecordIds =
           dropdownItems["SelectedDept"]?.map((obj) => obj["Record ID"]) || [];
@@ -1363,46 +1340,27 @@
           (obj) => obj["Record ID"] || []
         );
 
-        const selectedPromptTypeIds = dropdownItems["SelectedPromptType"]?.map(
+        const selectedPromptType = dropdownItems["SelectedPromptType"]?.map(
           (obj) => obj["Record ID"] || []
         );
-        const selectedIndustryIds = dropdownItems[
+        const selectedPromptIndustry = dropdownItems[
           "SelectedPromptIndustry"
         ]?.map((obj) => obj["Record ID"] || []);
 
-        let finalDeptRecordIds = selectedDeptRecordIds;
-        let finalRoleRecordIds = selectedRoleRecordIds;
-        let finalIndustryRecordIds = selectedIndustryIds;
-        let finalCategoryRecordIds = selectedCatgIds;
-        let finalTypeRecordIds = selectedPromptTypeIds;
+        console.log(categoryRecordIds);
+        console.log(industryRecordIds);
 
-        if (
-          selectedPromptIndustry.length === 0 &&
-          industryRecordIds.length > 0
-        ) {
-          finalIndustryRecordIds = industryRecordIds;
-        }
+        const finalDeptRecordIds =
+          Array.isArray(selectedDeptRecordIds) ||
+          selectedDeptRecordIds.length === 0
+            ? departmentRecordIds
+            : selectedDeptRecordIds;
 
-        if (
-          selectedPromptType === undefined &&
-          selectedPromptTypeIds.length > 0
-        ) {
-          finalTypeRecordIds = typeRecordIds;
-        }
+        const finalRoleRecordIds =
+          selectedRoleRecordIds === undefined
+            ? roleRecordIds
+            : selectedRoleRecordIds;
 
-        if (selectedCatgIds === undefined && categoryRecordIds.length > 0) {
-          finalCategoryRecordIds = categoryRecordIds;
-        }
-        if (
-          selectedDeptRecordIds.length === 0 &&
-          departmentRecordIds.length > 0
-        ) {
-          finalDeptRecordIds = departmentRecordIds;
-        }
-
-        if (selectedRoleRecordIds === undefined && roleRecordIds.length > 0) {
-          finalRoleRecordIds = roleRecordIds;
-        }
         const submitButton = document.querySelector(".submit");
         submitButton.textContent = "Submitting...";
 
@@ -1414,6 +1372,8 @@
           loader.style.display = "block";
 
           modal.addEventListener("click", closeModal);
+
+          console.log(catgVal);
 
           const response = await fetch(`${airtableApiUrl}${tableId}`, {
             headers: {
@@ -1427,12 +1387,12 @@
                   fields: {
                     "Prompt Departments": finalDeptRecordIds,
                     "Prompt Roles": finalRoleRecordIds,
-                    "Prompt Category": finalCategoryRecordIds,
+                    "Prompt Category.": catgVal,
                     "Prompt Title": promptTitle,
                     "Prompt Link": formattedSourceLink,
                     "Prompt Text": formattedPromptText,
-                    "Prompt Type": finalTypeRecordIds,
-                    "Prompt Industry": finalIndustryRecordIds,
+                    // "Prompt Type": selectedPromptType,
+                    // "Prompt Industry": industryRecordIds,
                   },
                 },
               ],
@@ -1469,13 +1429,12 @@
       };
       const form = document.getElementById("myForm");
       const overlay = document.getElementById("overlay");
-      const loader = document.getElementById("loader");
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         overlay.style.display = "block";
-        loader.style.display = "block";
+
         addNewEntry(formData);
       });
 
@@ -1483,7 +1442,6 @@
         if (event.keyCode === 13) {
           event.preventDefault();
           overlay.style.display = "block";
-          loader.style.display = "block";
           const modal = document.getElementById("success-modal");
           modal.style.display = "none";
           const formData = new FormData(event.target);
