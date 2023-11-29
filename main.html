@@ -792,11 +792,10 @@
         );
 
         if (updatedPromptRoleOptions.length > 0) {
-          let roleRecord = updatedPromptRoleOptions.map((role) => {
-            dropdownItems["Role Name"] = roleRecord;
+          dropdownItems["Role Name"] = updatedPromptRoleOptions;
 
-            return role;
-          });
+          // Now you can access dropdownItems["Role Name"] directly if needed
+          let roleRecord = updatedPromptRoleOptions.map((role) => role);
         }
       }
 
@@ -964,30 +963,32 @@
             suggestionsElement.classList.toggle("show");
           }
 
-          const matchingDepartments =
-            dropdownItems["Department"] &&
-            dropdownItems["Department"].filter((obj) =>
-              eventTargetValue.includes(obj.Department)
-            );
-          if (matchingDepartments.length > 0) {
-            selectedDepartments = matchingDepartments;
-            dropdownItems["SelectedDept"] = selectedDepartments;
-            updateSuggestions(dropdownItems["SelectedDept"]);
-          }
-          const matchingRole =
-            dropdownItems["Role Name"] &&
-            dropdownItems["Role Name"].filter((obj) =>
-              eventTargetValue.includes(obj["Role Name"])
-            );
-          selectedRoles = matchingRole;
-          dropdownItems["SelectedRole"] = selectedRoles;
+          if (Array.isArray(eventTargetValue)) {
+            const matchingDepartments =
+              dropdownItems["Department"] &&
+              dropdownItems["Department"].filter((obj) =>
+                eventTargetValue.includes(obj.Department)
+              );
+            if (matchingDepartments.length > 0) {
+              selectedDepartments = matchingDepartments;
+              dropdownItems["SelectedDept"] = selectedDepartments;
+              updateSuggestions(dropdownItems["SelectedDept"]);
+            }
+            const matchingRole =
+              dropdownItems["Role Name"] &&
+              dropdownItems["Role Name"].filter((obj) =>
+                eventTargetValue.includes(obj["Role Name"])
+              );
+            selectedRoles = matchingRole;
+            dropdownItems["SelectedRole"] = selectedRoles;
 
-          if (matchingDepartments.length > 0) {
-            const departmentRecordIds = matchingDepartments.map(
-              (dept) => dept["Record ID"]
-            );
-            dropdownItems["Record IDs"] = departmentRecordIds;
-            updateSuggestions(dropdownItems["Record IDs"]);
+            if (matchingDepartments.length > 0) {
+              const departmentRecordIds = matchingDepartments.map(
+                (dept) => dept["Record ID"]
+              );
+              dropdownItems["Record IDs"] = departmentRecordIds;
+              updateSuggestions(dropdownItems["Record IDs"]);
+            }
           }
         }
 
