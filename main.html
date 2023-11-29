@@ -794,7 +794,6 @@
         if (updatedPromptRoleOptions.length > 0) {
           dropdownItems["Role Name"] = updatedPromptRoleOptions;
 
-          // Now you can access dropdownItems["Role Name"] directly if needed
           let roleRecord = updatedPromptRoleOptions.map((role) => role);
         }
       }
@@ -961,6 +960,7 @@
             })
           ) {
             suggestionsElement.classList.toggle("show");
+            arrowElement.classList.toggle("rotated");
           }
 
           if (Array.isArray(eventTargetValue)) {
