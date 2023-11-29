@@ -773,7 +773,6 @@
 
         const promptRoleOptions = dropdownItems["Role Name"].filter((role) => {
           const roleDepartments = role["Departments"];
-          // console.log(roleDepartments);
           if (roleDepartments) {
             return roleDepartments.some((dept) => departments.includes(dept));
           } else {
@@ -975,7 +974,6 @@
             dropdownItems["SelectedDept"] = selectedDepartments;
             updateSuggestions(dropdownItems["SelectedDept"]);
           }
-          console.log(matchingDepartments);
           const matchingRole =
             dropdownItems["Role Name"] &&
             dropdownItems["Role Name"].filter((obj) =>
@@ -991,7 +989,6 @@
             dropdownItems["Record IDs"] = departmentRecordIds;
             updateSuggestions(dropdownItems["Record IDs"]);
           }
-          console.log(dropdownItems["Record IDs"]);
         }
 
         arrowElement.addEventListener("click", toggleArrowAndSuggestions);
@@ -1249,7 +1246,6 @@
               console.error(`Error creating record for ${nameType}: ${error}`);
             }
           }
-          console.log(createdRoles);
 
           return createdRoles;
         }
@@ -1284,12 +1280,6 @@
         let categoryRecordIds = [];
         let departmentRecordIds = [];
         let roleRecordIds = [];
-
-        console.log(selectedPromptType);
-        console.log(selectedPromptIndustry);
-        console.log(selectedCatg);
-        console.log(selectedDepartments);
-        console.log(selectedRoles);
 
         if (
           promptIndustry.length > 0 &&
@@ -1439,11 +1429,9 @@
             }),
             method: "POST",
           });
-          console.log(response);
           if (response.ok) {
             submitButton.disabled = true;
             const data = await response.json();
-            console.log(data);
             const form = document.getElementById("myForm");
             form.reset();
             // showToast("Successfully submitted!");
@@ -1451,7 +1439,6 @@
             modal.style.display = "block";
             overlay.style.display = "block";
           } else {
-            console.log(response);
             console.error("Error:", response.status, response.statusText);
             submitButton.disabled = false;
 
