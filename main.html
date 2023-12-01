@@ -97,7 +97,7 @@
         position: relative;
       }
 
-      @media only screen and (max-width: 29rem) {
+      @media only screen and (max-width: 39rem) {
         .eachInput {
           gap: 1rem;
         }
@@ -111,7 +111,7 @@
           width: 65%;
         }
       }
-      @media only screen and (max-width: 29rem) {
+      @media only screen and (max-width: 39rem) {
         .eachInput span {
           width: 70%;
         }
@@ -131,7 +131,7 @@
           width: 35%;
         }
       }
-      @media only screen and (max-width: 29rem) {
+      @media only screen and (max-width: 39rem) {
         .eachInput label {
           width: 30%;
         }
@@ -151,7 +151,7 @@
         border-radius: 0.5rem;
       }
 
-      @media only screen and (max-width: 29rem) {
+      @media only screen and (max-width: 39rem) {
         .inputDiv input {
           padding: 0.6rem;
           font-size: 0.7rem;
@@ -162,7 +162,7 @@
         color: #bab7b7;
         font-weight: 500;
       }
-      @media only screen and (max-width: 29rem) {
+      @media only screen and (max-width: 39rem) {
         .eachInput input::placeholder {
           font-size: 0.7rem;
         }
@@ -173,6 +173,12 @@
         transition: all 0.3s;
       }
 
+      @media only screen and (max-width: 39rem) {
+        .eachInput textarea {
+          padding: 0.5rem;
+          font-size: 0.7rem;
+        }
+      }
       .inputDiv textarea {
         width: 100%;
         padding: 0.7rem 0.5rem;
@@ -182,7 +188,7 @@
         border-radius: 0.5rem;
         resize: none;
       }
-      @media only screen and (max-width: 29rem) {
+      @media only screen and (max-width: 39rem) {
         .inputDiv textarea {
           padding: 0.5rem;
           font-size: 0.7rem;
@@ -368,6 +374,9 @@
         text-align: center;
         border-radius: 5px;
         position: relative;
+        max-width: 100%; /* Set a suitable max-width */
+        max-height: 80%; /* Set a suitable max-height */
+        overflow: auto; /* Add overflow:auto to allow scrolling if content exceeds the modal size */
       }
 
       .close-modal {
@@ -544,6 +553,46 @@
                   </svg>
                   <p class="error-message">Please enter a valid URL.</p>
                 </div>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="author">Author Name</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptAuthor"
+                  id="promptAuthor"
+                  placeholder="Select Author"
+                  required
+                />
+                <svg
+                  class="arrowDown arrowDownAuthor"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsAuthor">
+                <ul></ul>
               </div>
             </span>
           </div>
@@ -752,6 +801,8 @@
             li.textContent = item["Industry Name"];
           } else if (fieldName === "promptCatg") {
             li.textContent = item["Name"];
+          } else if (fieldName === "promptAuthor") {
+            li.textContent = item["Author's Name"];
           } else {
             li.textContent = item[fieldName];
           }
@@ -792,9 +843,11 @@
         );
 
         if (updatedPromptRoleOptions.length > 0) {
-          dropdownItems["Role Name"] = updatedPromptRoleOptions;
+          let roleRecord = updatedPromptRoleOptions.map((role) => {
+            dropdownItems["Role Name"] = roleRecord;
 
-          let roleRecord = updatedPromptRoleOptions.map((role) => role);
+            return role;
+          });
         }
       }
 
@@ -802,6 +855,8 @@
         dropdownItems["promptType"];
         dropdownItems["promptIndustry"];
         dropdownItems["promptCatg"];
+        dropdownItems["promptAuthor"];
+
         populateDropdown(
           "tbldLUtMAk0sfvwIF",
           "suggestionsType ul",
@@ -817,11 +872,17 @@
           "suggestionsCatg ul",
           "promptCatg"
         );
+        populateDropdown(
+          "tblpAOkQtCbHrdHMY",
+          "suggestionsAuthor ul",
+          "promptAuthor"
+        );
       }
 
       let selectedPromptIndustry = [];
       let selectedPromptType = [];
       let selectedCatg = [];
+      let selectedAuthor = [];
 
       function setupInput(inputElement, suggestionsElement, arrowElement) {
         function toggleArrowAndSuggestions(eventTargetValue) {
@@ -880,6 +941,18 @@
               selectedCatg = matchingCatg;
               dropdownItems["SelectedCatg"] = selectedCatg;
               updateSuggestions(dropdownItems["SelectedCatg"]);
+            }
+
+            const matchingPromptAuthor =
+              dropdownItems["promptAuthor"] &&
+              dropdownItems["promptAuthor"].filter((obj) => {
+                return event.target.textContent.includes(obj["Author's Name"]);
+              });
+
+            if (matchingPromptAuthor.length > 0) {
+              selectedAuthor = matchingPromptAuthor;
+              dropdownItems["SelectedPromptAuthor"] = selectedAuthor;
+              updateSuggestions(dropdownItems["SelectedPromptAuthor"]);
             }
           }
         });
@@ -953,7 +1026,6 @@
         ];
 
         function toggleArrowAndSuggestions(eventTargetValue) {
-          arrowElement.classList.add("rotated");
           if (
             !allowedSelectors.some((selector) => {
               return event.target.closest(selector);
@@ -1115,6 +1187,7 @@
         document.addEventListener("click", function (event) {
           if (
             !inputElement.contains(event.target) &&
+            !arrowElement.contains(event.target) &&
             !suggestionsElement.contains(event.target)
           ) {
             suggestionsElement.classList.remove("show");
@@ -1153,6 +1226,16 @@
       promptIndustry.addEventListener(
         "focus",
         setupInput(promptIndustry, suggestionsIndustry, arrowIndustry)
+      );
+
+      // Setup for the last input
+      const promptAuthor = document.getElementById("promptAuthor");
+      const suggestionsAuthor = document.querySelector(".suggestionsAuthor");
+      const arrowAuthor = document.querySelector(".arrowDownAuthor");
+
+      promptIndustry.addEventListener(
+        "focus",
+        setupInput(promptAuthor, suggestionsAuthor, arrowAuthor)
       );
 
       // Setup for the fourth input
@@ -1261,6 +1344,11 @@
           .split(",")
           .map((item) => item.trim());
 
+        const promptAuthor = formData
+          .get("promptAuthor")
+          .split(",")
+          .map((item) => item.trim());
+
         const promptCategory = formData
           .get("promptCatg")
           .split(",")
@@ -1279,6 +1367,7 @@
         let typeRecordIds = [];
         let industryRecordIds = [];
         let categoryRecordIds = [];
+        let authorRecordIds = [];
         let departmentRecordIds = [];
         let roleRecordIds = [];
 
@@ -1307,15 +1396,15 @@
           );
         }
         if (
-          promptCategory.length > 0 &&
-          !selectedCatg.some((category) =>
-            promptCategory.includes(category["Name"])
+          promptAuthor.length > 0 &&
+          !selectedAuthor.some((author) =>
+            promptAuthor.includes(author["Author's Name"])
           )
         ) {
-          categoryRecordIds = await createRecords(
-            "tblFJNzh7J8Bv2Uip",
-            promptCategory,
-            "Name"
+          authorRecordIds = await createRecords(
+            "tblpAOkQtCbHrdHMY",
+            promptAuthor,
+            "Author's Name"
           );
         }
 
@@ -1354,6 +1443,10 @@
           (obj) => obj["Record ID"] || []
         );
 
+        const selectedAuthorIds = dropdownItems["SelectedPromptAuthor"]?.map(
+          (obj) => obj["Record ID"] || []
+        );
+
         const selectedPromptTypeIds = dropdownItems["SelectedPromptType"]?.map(
           (obj) => obj["Record ID"] || []
         );
@@ -1364,6 +1457,7 @@
         let finalDeptRecordIds = selectedDeptRecordIds;
         let finalRoleRecordIds = selectedRoleRecordIds;
         let finalIndustryRecordIds = selectedIndustryIds;
+        let finalAuthorRecordIds = selectedAuthorIds;
         let finalCategoryRecordIds = selectedCatgIds;
         let finalTypeRecordIds = selectedPromptTypeIds;
 
@@ -1372,6 +1466,10 @@
           industryRecordIds.length > 0
         ) {
           finalIndustryRecordIds = industryRecordIds;
+        }
+
+        if (selectedAuthor.length === 0 && authorRecordIds.length > 0) {
+          finalAuthorRecordIds = authorRecordIds;
         }
 
         if (
@@ -1424,6 +1522,7 @@
                     "Prompt Text": formattedPromptText,
                     "Prompt Type": finalTypeRecordIds,
                     "Prompt Industry": finalIndustryRecordIds,
+                    Authors: finalAuthorRecordIds,
                   },
                 },
               ],
