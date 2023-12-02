@@ -407,6 +407,36 @@
         <h4>Fill out this form to add a Prompt</h4>
         <form class="promptForm" id="myForm">
           <div class="eachInput">
+            <label for="promptTitle">Prompt Title *</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptTitle"
+                  id="promptTitle"
+                  placeholder="Your Prompt Title Goes Here"
+                  required
+                />
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="promptText">Prompt Text</label>
+            <span>
+              <div class="inputDiv">
+                <textarea
+                  name="promptText"
+                  id=""
+                  cols="30"
+                  rows="6"
+                  id="promptText"
+                  required
+                  placeholder="Paste Prompts here"
+                ></textarea>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
             <label for="promptType">Prompt Type *</label>
             <span>
               <div class="inputDiv">
@@ -488,114 +518,6 @@
             </span>
           </div>
 
-          <div class="eachInput">
-            <label for="promptText">Prompt Text</label>
-            <span>
-              <div class="inputDiv">
-                <textarea
-                  name="promptText"
-                  id=""
-                  cols="30"
-                  rows="6"
-                  id="promptText"
-                  required
-                  placeholder="Paste Prompts here"
-                ></textarea>
-              </div>
-            </span>
-          </div>
-          <div class="eachInput">
-            <label for="promptTitle">Prompt Title *</label>
-            <span>
-              <div class="inputDiv">
-                <input
-                  type="text"
-                  name="promptTitle"
-                  id="promptTitle"
-                  placeholder="Your Prompt Title Goes Here"
-                  required
-                />
-              </div>
-            </span>
-          </div>
-          <div class="eachInput">
-            <label for="sourceLink"> Source Link</label>
-            <span>
-              <div class="inputDiv">
-                <input
-                  type="url"
-                  id="sourceLink"
-                  name="sourceLink"
-                  placeholder="http://example.com"
-                  value="http://"
-                  pattern="https?://(www\.)?.*"
-                  required
-                />
-                <div class="errorMssg">
-                  <svg
-                    id="errorIcon"
-                    fill="#de350b"
-                    height="15px"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g
-                      id="SVGRepo_tracerCarrier"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <path
-                        d="M12.884 2.532c-.346-.654-1.422-.654-1.768 0l-9 17A.999.999 0 0 0 3 21h18a.998.998 0 0 0 .883-1.467L12.884 2.532zM13 18h-2v-2h2v2zm-2-4V9h2l.001 5H11z"
-                      ></path>
-                    </g>
-                  </svg>
-                  <p class="error-message">Please enter a valid URL.</p>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div class="eachInput">
-            <label for="author">Author Name</label>
-            <span>
-              <div class="inputDiv">
-                <input
-                  type="text"
-                  name="promptAuthor"
-                  id="promptAuthor"
-                  placeholder="Select Author"
-                  required
-                />
-                <svg
-                  class="arrowDown arrowDownAuthor"
-                  fill="#bab7b7"
-                  height="13px"
-                  version="1.1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  viewBox="0 0 330 330"
-                  xml:space="preserve"
-                >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g
-                    id="SVGRepo_tracerCarrier"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></g>
-                  <g id="SVGRepo_iconCarrier">
-                    <path
-                      id="XMLID_225_"
-                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
-                    ></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="suggestions suggestionsAuthor">
-                <ul></ul>
-              </div>
-            </span>
-          </div>
           <div class="eachInput">
             <label for="industry">Industry</label>
             <span>
@@ -713,6 +635,84 @@
               </div>
               <div class="suggestions suggestionsRole">
                 <ul></ul>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="author">Author Name</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="text"
+                  name="promptAuthor"
+                  id="promptAuthor"
+                  placeholder="Select Author"
+                  required
+                />
+                <svg
+                  class="arrowDown arrowDownAuthor"
+                  fill="#bab7b7"
+                  height="13px"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 330 330"
+                  xml:space="preserve"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="XMLID_225_"
+                      d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="suggestions suggestionsAuthor">
+                <ul></ul>
+              </div>
+            </span>
+          </div>
+          <div class="eachInput">
+            <label for="sourceLink"> Source Link</label>
+            <span>
+              <div class="inputDiv">
+                <input
+                  type="url"
+                  id="sourceLink"
+                  name="sourceLink"
+                  placeholder="http://example.com"
+                  value="http://"
+                  pattern="https?://(www\.)?.*"
+                  required
+                />
+                <div class="errorMssg">
+                  <svg
+                    id="errorIcon"
+                    fill="#de350b"
+                    height="15px"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        d="M12.884 2.532c-.346-.654-1.422-.654-1.768 0l-9 17A.999.999 0 0 0 3 21h18a.998.998 0 0 0 .883-1.467L12.884 2.532zM13 18h-2v-2h2v2zm-2-4V9h2l.001 5H11z"
+                      ></path>
+                    </g>
+                  </svg>
+                  <p class="error-message">Please enter a valid URL.</p>
+                </div>
               </div>
             </span>
           </div>
