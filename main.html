@@ -1407,7 +1407,18 @@
             "Author's Name"
           );
         }
-
+        if (
+          promptCategory.length > 0 &&
+          !selectedCatg.some((category) =>
+            promptCategory.includes(category["Name"])
+          )
+        ) {
+          categoryRecordIds = await createRecords(
+            "tblFJNzh7J8Bv2Uip",
+            promptCategory,
+            "Name"
+          );
+        }
         if (
           promptDepartment.length > 0 &&
           !selectedDepartments.some((dept) =>
