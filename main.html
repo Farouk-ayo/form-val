@@ -813,6 +813,7 @@
       };
 
       let promptRoleOptions;
+      let roles;
 
       async function updateSuggestions(departments) {
         const existingPromptRoleOptions = dropdownItems["Role Name"];
@@ -821,6 +822,7 @@
           "suggestionsRole ul",
           "Role Name"
         );
+        roles = dropdownItems["Role Name"];
 
         const promptRoleOptions = dropdownItems["Role Name"].filter((role) => {
           const roleDepartments = role["Departments"];
@@ -1364,6 +1366,18 @@
           .split(",")
           .map((item) => item.trim());
 
+        console.log(
+          promptType,
+          promptIndustry,
+          promptAuthor,
+          promptCategory,
+          promptDepartment,
+          promptRoles,
+          console.log(dropdownItems["promptIndustry"]),
+          console.log(selectedPromptType),
+          console.log(roles)
+        );
+
         let typeRecordIds = [];
         let industryRecordIds = [];
         let categoryRecordIds = [];
@@ -1371,77 +1385,132 @@
         let departmentRecordIds = [];
         let roleRecordIds = [];
 
-        if (
-          promptIndustry.length > 0 &&
-          !selectedPromptIndustry.some((industry) =>
-            promptIndustry.includes(industry["Industry Name"])
-          )
-        ) {
-          industryRecordIds = await createRecords(
-            "tblcQPjP9SPEEXmph",
-            promptIndustry,
-            "Industry Name"
-          );
-        }
-        if (
-          promptType.length > 0 &&
-          !selectedPromptType.some((type) =>
-            promptType.includes(type["Prompt Type Names"])
-          )
-        ) {
-          typeRecordIds = await createRecords(
-            "tbldLUtMAk0sfvwIF",
-            promptType,
-            "Prompt Type Names"
-          );
-        }
-        if (
-          promptAuthor.length > 0 &&
-          !selectedAuthor.some((author) =>
-            promptAuthor.includes(author["Author's Name"])
-          )
-        ) {
-          authorRecordIds = await createRecords(
-            "tblpAOkQtCbHrdHMY",
-            promptAuthor,
-            "Author's Name"
-          );
-        }
-        if (
-          promptCategory.length > 0 &&
-          !selectedCatg.some((category) =>
-            promptCategory.includes(category["Name"])
-          )
-        ) {
-          categoryRecordIds = await createRecords(
-            "tblFJNzh7J8Bv2Uip",
-            promptCategory,
-            "Name"
-          );
-        }
-        if (
-          promptDepartment.length > 0 &&
-          !selectedDepartments.some((dept) =>
-            promptDepartment.includes(dept.Department)
-          )
-        ) {
-          departmentRecordIds = await createRecords(
-            "tbl1L1BhG3RIFZPl9",
-            promptDepartment,
-            "Department"
-          );
-        }
-
-        if (
-          promptRoles.length > 0 &&
-          !selectedRoles.some((role) => promptRoles.includes(role["Role Name"]))
-        ) {
-          roleRecordIds = await createRecords(
-            "tblNOSfTqt31iJZY8",
-            promptRoles,
-            "Role Name"
-          );
-        }
+        (async () => {
+          if (
+            promptIndustry.length > 0 &&
+            !selectedPromptIndustry.some((industry) =>
+              promptIndustry.includes(industry["Industry Name"])
+            ) &&
+            !dropdownItems["promptIndustry"].some((industry) =>
+              promptIndustry.some(
+                (text) =>
+                  industry["Industry Name"].toLowerCase().trim() ===
+                  text.toLowerCase().trim()
+              )
+            )
+          ) {
+            industryRecordIds = await createRecords(
+              "tblcQPjP9SPEEXmph",
+              promptIndustry,
+              "Industry Name"
+            );
+          }
+        })();
+        (async () => {
+          if (
+            promptType.length > 0 &&
+            !selectedPromptType.some((type) =>
+              promptType.includes(type["Prompt Type Names"])
+            ) &&
+            !dropdownItems["promptType"].some((type) =>
+              promptType.some(
+                (text) =>
+                  type["Prompt Type Names"].toLowerCase().trim() ===
+                  text.toLowerCase().trim()
+              )
+            )
+          ) {
+            typeRecordIds = await createRecords(
+              "tbldLUtMAk0sfvwIF",
+              promptType,
+              "Prompt Type Names"
+            );
+          }
+        })();
+        (async () => {
+          if (
+            promptAuthor.length > 0 &&
+            !selectedAuthor.some((author) =>
+              promptAuthor.includes(author["Author's Name"])
+            ) &&
+            !dropdownItems["promptAuthor"].some((author) =>
+              promptAuthor.some(
+                (text) =>
+                  author["Author's Name"].toLowerCase().trim() ===
+                  text.toLowerCase().trim()
+              )
+            )
+          ) {
+            authorRecordIds = await createRecords(
+              "tblpAOkQtCbHrdHMY",
+              promptAuthor,
+              "Author's Name"
+            );
+          }
+        })();
+        (async () => {
+          if (
+            promptCategory.length > 0 &&
+            !selectedCatg.some((category) =>
+              promptCategory.includes(category["Name"])
+            ) &&
+            !dropdownItems["promptCatg"].some((category) =>
+              promptCategory.some(
+                (text) =>
+                  category.Name.toLowerCase().trim() ===
+                  text.toLowerCase().trim()
+              )
+            )
+          ) {
+            categoryRecordIds = await createRecords(
+              "tblFJNzh7J8Bv2Uip",
+              promptCategory,
+              "Name"
+            );
+          }
+        })();
+        (async () => {
+          if (
+            promptDepartment.length > 0 &&
+            !selectedDepartments.some((dept) =>
+              promptDepartment.includes(dept.Department)
+            ) &&
+            !dropdownItems["Department"].some((Department) =>
+              promptDepartment.some(
+                (text) =>
+                  Department.Department.toLowerCase().trim() ===
+                  text.toLowerCase().trim()
+              )
+            )
+          ) {
+            departmentRecordIds = await createRecords(
+              "tbl1L1BhG3RIFZPl9",
+              promptDepartment,
+              "Department"
+            );
+          }
+        })();
+        (async () => {
+          if (
+            promptRoles.length > 0 &&
+            !selectedRoles.some((role) =>
+              promptRoles.includes(role["Role Name"])
+            ) &&
+            !dropdownItems["Role Name"].some((roles) =>
+              promptRoles.some(
+                (text) =>
+                  roles["Role Name"].toLowerCase().trim() ===
+                  text.toLowerCase().trim()
+              )
+            )
+          ) {
+            roleRecordIds = await createRecords(
+              "tblNOSfTqt31iJZY8",
+              promptRoles,
+              "Role Name"
+            );
+          }
+        })();
 
         const selectedDeptRecordIds =
           dropdownItems["SelectedDept"]?.map((obj) => obj["Record ID"]) || [];
